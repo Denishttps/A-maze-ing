@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чертёж фигуры — Интерактивный</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f0f0f0;
+            display: flex;
+            min-height: 100vh;
+        }
+        .controls {
+            width: 320px;
+            min-width: 320px;
+            background: #fff;
+            padding: 24px 20px;
+            border-right: 2px solid #ccc;
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+        .controls h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: #333;
+            border-bottom: 2px solid #c00;
+            padding-bottom: 8px;
+        }
+        .control-group {
+            margin-bottom: 14px;
+        }
+        .control-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 4px;
+        }
+        .control-group .row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .control-group input[type="range"] {
+            flex: 1;
+            accent-color: #c00;
+        }
+        .control-group .val {
+            width: 44px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: #c00;
+        }
+        .canvas-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fdf8e8;
+            position: relative;
+        }
+        svg {
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1));
+        }
+        .dim-line { stroke: #c00; stroke-width: 1; }
+        .dim-arrow { fill: #c00; }
+        .dim-text {
+            fill: #c00;
+            font-size: 14px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-weight: bold;
+            text-anchor: middle;
+        }
+        .main-outline {
+            fill: #fff;
+            stroke: #222;
+            stroke-width: 2.5;
+            stroke-linejoin: round;
+        }
+        .depth-face {
+            stroke: #222;
+            stroke-width: 1.5;
+            stroke-linejoin: round;
+        }
+        .hidden-line {
+            stroke: #888;
+            stroke-width: 1;
+            stroke-dasharray: 6 4;
+            fill: none;
+        }
+        .info {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: #999;
+        }
+        .controls .section-title {
+            font-size: 14px;
+            color: #888;
+            margin: 16px 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .checkbox-group {
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .checkbox-group input { accent-color: #c00; }
+        .checkbox-group label { font-size: 13px; color: #555; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h2>⚙️ Параметры чертежа</h2>
+
+        <div class="section-title">Основание</div>
+        <div class="control-group">
+            <label>Левая сторона (a)</label>
+            <div class="row">
+                <input type="range" id="sideLeft" min="0.5" max="5" step="0.1" value="2">
+                <span class="val" id="sideLeftVal">2</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label>Центральная ширина (b)</label>
+            <div class="row">
+                <input type="range" id="centerW" min="1" max="8" step="0.1" value="4">
+                <span class="val" id="centerWVal">4</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label>Правая сторона (c)</label>
+            <div class="row">
+                <input type="range" id="sideRight" min="0.5" max="5" step="0.1" value="2">
+                <span class="val" id="sideRightVal">2</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label>Высота основания (h₁)</label>
+            <div class="row">
+                <input type="range" id="baseH" min="1" max="6" step="0.1" value="3">
+                <span class="val" id="baseHVal">3</span>
+            </div>
+        </div>
+
+        <div class="section-title">Верхние скосы</div>
+        <div class="control-group">
+            <label>Высота скоса (h₂)</label>
+            <div class="row">
+                <input type="range" id="chamferH" min="0.5" max="4" step="0.1" value="2">
+                <span class="val" id="chamferHVal">2</span>
+            </div>
+        </div>
+
+        <div class="section-title">Треугольный вырез</div>
+        <div class="control-group">
+            <label>Сторона треугольника (t)</label>
+            <div class="row">
+                <input type="range" id="triSide" min="1" max="5" step="0.1" value="2.8">
+                <span class="val" id="triSideVal">2.8</span>
+            </div>
+        </div>
+
+        <div class="section-title">3D Глубина</div>
+        <div class="control-group">
+            <label>Глубина (d)</label>
+            <div class="row">
+                <input type="range" id="depth" min="0.5" max="5" step="0.1" value="3">
+                <span class="val" id="depthVal">3</span>
+            </div>
+        </div>
+
+        <div class="section-title">Отображение</div>
+        <div class="checkbox-group">
+            <input type="checkbox" id="showDims" checked>
+            <label for="showDims">Показать размеры</label>
+        </div>
+        <div class="checkbox-group">
+            <input type="checkbox" id="show3D" checked>
+            <label for="show3D">Показать 3D глубину</label>
+        </div>
+        <div class="checkbox-group">
+            <input type="checkbox" id="showHidden" checked>
+            <label for="showHidden">Показать скрытые линии</label>
+        </div>
+
+        <div class="control-group">
+            <label>Масштаб</label>
+            <div class="row">
+                <input type="range" id="scale" min="40" max="120" step="1" value="70">
+                <span class="val" id="scaleVal">70</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="canvas-area">
+        <svg id="drawing" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="info">Интерактивный чертёж • Используйте ползунки слева для управления</div>
+    </div>
+
+    <script>
+        const $ = id => document.getElementById(id);
+
+        const inputs = {
+            sideLeft:  $('sideLeft'),
+            centerW:   $('centerW'),
+            sideRight: $('sideRight'),
+            baseH:     $('baseH'),
+            chamferH:  $('chamferH'),
+            triSide:   $('triSide'),
+            depth:     $('depth'),
+            scale:     $('scale'),
+            showDims:  $('showDims'),
+            show3D:    $('show3D'),
+            showHidden:$('showHidden'),
+        };
+
+        function getParams() {
+            return {
+                a: parseFloat(inputs.sideLeft.value),
+                b: parseFloat(inputs.centerW.value),
+                c: parseFloat(inputs.sideRight.value),
+                h1: parseFloat(inputs.baseH.value),
+                h2: parseFloat(inputs.chamferH.value),
+                t: parseFloat(inputs.triSide.value),
+                d: parseFloat(inputs.depth.value),
+                S: parseFloat(inputs.scale.value),
+                showDims: inputs.showDims.checked,
+                show3D: inputs.show3D.checked,
+                showHidden: inputs.showHidden.checked,
+            };
+        }
+
+        function updateLabels() {
+            $('sideLeftVal').textContent  = inputs.sideLeft.value;
+            $('centerWVal').textContent   = inputs.centerW.value;
+            $('sideRightVal').textContent = inputs.sideRight.value;
+            $('baseHVal').textContent     = inputs.baseH.value;
+            $('chamferHVal').textContent  = inputs.chamferH.value;
+            $('triSideVal').textContent   = inputs.triSide.value;
+            $('depthVal').textContent     = inputs.depth.value;
+            $('scaleVal').textContent     = inputs.scale.value;
+        }
+
+        function arrow(svg, x1, y1, x2, y2, size) {
+            const angle = Math.atan2(y2 - y1, x2 - x1);
+            const s = size || 6;
+            // Arrow at start
+            const sa1x = x1 + s * Math.cos(angle - 0.4);
+            const sa1y = y1 + s * Math.sin(angle - 0.4);
+            const sa2x = x1 + s * Math.cos(angle + 0.4);
+            const sa2y = y1 + s * Math.sin(angle + 0.4);
+            // Arrow at end
+            const ea1x = x2 - s * Math.cos(angle - 0.4);
+            const ea1y = y2 - s * Math.sin(angle - 0.4);
+            const ea2x = x2 - s * Math.cos(angle + 0.4);
+            const ea2y = y2 - s * Math.sin(angle + 0.4);
+            return `
+                <line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="dim-line"/>
+                <polygon points="${x1},${y1} ${sa1x},${sa1y} ${sa2x},${sa2y}" class="dim-arrow"/>
+                <polygon points="${x2},${y2} ${ea1x},${ea1y} ${ea2x},${ea2y}" class="dim-arrow"/>
+            `;
+        }
+
+        function dimH(svg, x, y1, y2, label, side) {
+            const offset = side === 'left' ? -30 : 30;
+            const mx = x + offset;
+            const ext = side === 'left' ? -8 : 8;
+            return `
+                <line x1="${x + ext}" y1="${y1}" x2="${mx - 4}" y2="${y1}" class="dim-line" stroke-dasharray="3 2"/>
+                <line x1="${x + ext}" y1="${y2}" x2="${mx - 4}" y2="${y2}" class="dim-line" stroke-dasharray="3 2"/>
+                ${arrow(svg, mx, y1, mx, y2)}
+                <text x="${mx - 12}" y="${(y1 + y2) / 2 + 5}" class="dim-text" text-anchor="middle">${label}</text>
+            `;
+        }
+
+        function dimW(svg, x1, x2, y, label) {
+            const offset = 30;
+            const my = y + offset;
+            return `
+                <line x1="${x1}" y1="${y + 8}" x2="${x1}" y2="${my - 4}" class="dim-line" stroke-dasharray="3 2"/>
+                <line x1="${x2}" y1="${y + 8}" x2="${x2}" y2="${my - 4}" class="dim-line" stroke-dasharray="3 2"/>
+                ${arrow(svg, x1, my, x2, my)}
+                <text x="${(x1 + x2) / 2}" y="${my + 16}" class="dim-text">${label}</text>
+            `;
+        }
+
+        function draw() {
+            updateLabels();
+            const p = getParams();
+            const S = p.S;
+            const svg = $('drawing');
+
+            const a = p.a * S, b = p.b * S, c = p.c * S;
+            const h1 = p.h1 * S, h2 = p.h2 * S;
+            const t = p.t * S;
+            const d = p.d * S;
+            const totalW = a + b + c;
+            const totalH = h1 + h2;
+            const r = b / 2; // semicircle radius
+
+            // Triangle peak height from base
+            const triBase = b;
+            const triHalfBase = triBase / 2;
+            const triH = Math.sqrt(Math.max(t * t - triHalfBase * triHalfBase, 0));
+
+            // 3D offset
+            const dx = p.show3D ? d * 0.45 : 0;
+            const dy = p.show3D ? d * 0.35 : 0;
+
+            // Padding
+            const pad = 80;
+            const svgW = totalW + dx + pad * 2 + 60;
+            const svgH = totalH + r + dy + pad * 2 + 60;
+
+            svg.setAttribute('width', svgW);
+            svg.setAttribute('height', svgH);
+            svg.setAttribute('viewBox', `0 0 ${svgW} ${svgH}`);
+
+            // Origin: bottom-left of front face
+            const ox = pad + 40;
+            const oy = pad + totalH + r + 10;
+
+            // Front face key points (from bottom-left, clockwise)
+            // Bottom-left
+            const P0 = [ox, oy];
+            // left side of triangle notch start
+            const P1 = [ox + a, oy];
+            // triangle peak
+            const P2 = [ox + a + triHalfBase, oy - triH];
+            // right side of triangle notch
+            const P3 = [ox + a + triBase, oy];
+            // bottom-right
+            const P4 = [ox + totalW, oy];
+            // right side at chamfer start (going up)
+            const P5 = [ox + totalW, oy - h1];
+            // right chamfer top (inner)
+            const P6 = [ox + a + b, oy - h1 - h2];
+            // left chamfer top (inner)
+            const P7 = [ox + a, oy - h1 - h2];
+            // left side at chamfer start
+            const P8 = [ox, oy - h1];
+
+            // Semicircle center
+            const cx = ox + a + b / 2;
+            const cy = oy - h1 - h2;
+
+            // Front face path (with semicircle and triangle cutout)
+            const frontPath = `
+                M ${P0[0]} ${P0[1]}
+                L ${P1[0]} ${P1[1]}
+                L ${P2[0]} ${P2[1]}
+                L ${P3[0]} ${P3[1]}
+                L ${P4[0]} ${P4[1]}
+                L ${P5[0]} ${P5[1]}
+                L ${P6[0]} ${P6[1]}
+                A ${r} ${r} 0 1 1 ${P7[0]} ${P7[1]}
+                L ${P8[0]} ${P8[1]}
+                Z
+            `;
+
+            let html = '';
+
+            // --- 3D depth faces ---
+            if (p.show3D) {
+                // Right side face
+                const rightFace = `
+                    M ${P4[0]} ${P4[1]}
+                    L ${P4[0] + dx} ${P4[1] - dy}
+                    L ${P5[0] + dx} ${P5[1] - dy}
+                    L ${P5[0]} ${P5[1]}
+                    Z
+                `;
+                html += `<path d="${rightFace}" class="depth-face" fill="#e8e8e8"/>`;
+
+                // Top-right chamfer depth face
+                const topRightFace = `
+                    M ${P5[0]} ${P5[1]}
+                    L ${P5[0] + dx} ${P5[1] - dy}
+                    L ${P6[0] + dx} ${P6[1] - dy}
+                    L ${P6[0]} ${P6[1]}
+                    Z
+                `;
+                html += `<path d="${topRightFace}" class="depth-face" fill="#ddd"/>`;
+
+                // Semicircle top depth
+                const semiTopPath = `
+                    M ${P7[0]} ${P7[1]}
+                    A ${r} ${r} 0 1 0 ${P6[0]} ${P6[1]}
+                    L ${P6[0] + dx} ${P6[1] - dy}
+                    A ${r} ${r} 0 1 1 ${P7[0] + dx} ${P7[1] - dy}
+                    Z
+                `;
+                html += `<path d="${semiTopPath}" class="depth-face" fill="#e0e0e0"/>`;
+
+                // Top-left chamfer depth face
+                const topLeftFace = `
+                    M ${P7[0]} ${P7[1]}
+                    L ${P7[0] + dx} ${P7[1] - dy}
+                    L ${P8[0] + dx} ${P8[1] - dy}
+                    L ${P8[0]} ${P8[1]}
+                    Z
+                `;
+                html += `<path d="${topLeftFace}" class="depth-face" fill="#ddd"/>`;
+
+                // Hidden lines (back edges)
+                if (p.showHidden) {
+                    html += `<line x1="${P0[0] + dx}" y1="${P0[1] - dy}" x2="${P8[0] + dx}" y2="${P8[1] - dy}" class="hidden-line"/>`;
+                    html += `<line x1="${P0[0]}" y1="${P0[1]}" x2="${P0[0] + dx}" y2="${P0[1] - dy}" class="hidden-line"/>`;
+                    html += `<line x1="${P0[0] + dx}" y1="${P0[1] - dy}" x2="${P4[0] + dx}" y2="${P4[1] - dy}" class="hidden-line"/>`;
+                }
+            }
+
+            // --- Front face ---
+            html += `<path d="${frontPath}" class="main-outline"/>`;
+
+            // --- Dimension lines ---
+            if (p.showDims) {
+                // Bottom width dimensions
+                html += dimW(svg, P0[0], P1[0], oy, p.a);
+                html += dimW(svg, P1[0], P3[0], oy, p.b);
+                html += dimW(svg, P3[0], P4[0], oy, p.c);
+
+                // Left height dimensions
+                html += dimH(svg, ox, oy - h1, oy, p.h1, 'left');
+                html += dimH(svg, ox, oy - h1 - h2, oy - h1, p.h2, 'left');
+
+                // Triangle side dimension
+                const tmx = (P2[0] + P3[0]) / 2 + 14;
+                const tmy = (P2[1] + P3[1]) / 2;
+                html += `<text x="${tmx}" y="${tmy}" class="dim-text" fill="#c00" font-size="13">${p.t}</text>`;
+
+                // Depth dimension (right side)
+                if (p.show3D) {
+                    const drx1 = P4[0] + 4;
+                    const dry1 = P4[1] - 4;
+                    const drx2 = P4[0] + dx - 4;
+                    const dry2 = P4[1] - dy + 4;
+                    html += arrow(svg, drx1, dry1, drx2, dry2);
+                    html += `<text x="${(drx1 + drx2) / 2 + 14}" y="${(dry1 + dry2) / 2 + 4}" class="dim-text" font-size="13">${p.d}</text>`;
+                }
+            }
+
+            svg.innerHTML = html;
+        }
+
+        // Bind events
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('input', draw);
+        });
+
+        draw();
+    </script>
+</body>
+</html>
