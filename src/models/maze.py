@@ -102,16 +102,23 @@ class Maze:
 
         return x, y
 
-    def open_entry_exit(self) -> None:
-        if self.entry.x > 0 and self.entry.x < self.width - 1:
-            self.entry.remove_wall(Cell.TOP)
-        if self.entry.y >= 0 and self.entry.y <= self.height - 1:
-            self.entry.remove_wall(Cell.LEFT)
+def open_entry_exit(self) -> None:
+    self._open_border_wall(self.entry)
+    self._open_border_wall(self.exit)
 
-        if self.exit.x > 0 and self.exit.x < self.width - 1:
-            self.exit.remove_wall(Cell.BOTTOM)
-        if self.exit.y >= 0 and self.exit.y <= self.height - 1:
-            self.exit.remove_wall(Cell.RIGHT)
+def _open_border_wall(self, cell: Cell) -> None:
+    if cell.y == 0:
+        cell.remove_wall(Cell.TOP)
+    elif cell.y == self.height - 1:
+        cell.remove_wall(Cell.BOTTOM)
+    elif cell.x == 0:
+        cell.remove_wall(Cell.LEFT)
+    elif cell.x == self.width - 1:
+        cell.remove_wall(Cell.RIGHT)
+    else:
+        raise ValueError(
+            f"Cell ({cell.x}, {cell.y}) is not on the border."
+        )
 
     def get_unvisited(self) -> list[Cell]:
         return [
