@@ -1,5 +1,5 @@
 from interfaces import MazeHook
-from algo.utils import break_perfect
+from utils.algo import break_perfect
 from models.maze import Maze
 
 
