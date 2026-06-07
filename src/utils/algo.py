@@ -4,7 +4,11 @@ from models.maze import Maze
 from models.cell import Cell
 
 
-def break_perfect(maze: Maze, percent: float = 0.1, seed: int = None) -> None:
+def break_perfect(
+    maze: Maze,
+    percent: float,
+    seed: int | None = None
+) -> None:
     rng = Random(seed)
     walls = []
 
@@ -18,13 +22,13 @@ def break_perfect(maze: Maze, percent: float = 0.1, seed: int = None) -> None:
             if x < maze.width - 1:
                 neighbor = maze.grid[y][x + 1]
 
-                if cell.walls & Cell.RIGHT and not neighbor.blocked:
+                if cell.walls & Cell.SOUTH and not neighbor.blocked:
                     walls.append((cell, neighbor))
 
             if y < maze.height - 1:
                 neighbor = maze.grid[y + 1][x]
 
-                if cell.walls & Cell.BOTTOM and not neighbor.blocked:
+                if cell.walls & Cell.EAST and not neighbor.blocked:
                     walls.append((cell, neighbor))
 
     rng.shuffle(walls)

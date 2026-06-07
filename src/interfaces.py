@@ -1,13 +1,16 @@
 from abc import ABC, abstractmethod
-from typing import Protocol
+from typing import ClassVar, Literal, Protocol, Generic, TypeVar
 
 from models.cell import Cell
 from models.maze import Maze
 
 
+T = TypeVar('T')
+
+
 class MazeAlgorithm(ABC):
     name: str
-    _DIRECTIONS: list[tuple[int, int]] = [
+    _DIRECTIONS: ClassVar[list[tuple[int, int]]] = [
         (0, -1),  # Up
         (1, 0),   # Right
         (0, 1),   # Down
@@ -47,5 +50,48 @@ class MazeAlgorithm(ABC):
                 cell.visited = False
 
 
+class MazeSolver(ABC):
+    name: str
+
+    _DIRECTIONS: ClassVar[list[tuple[int, int]]] = [
+        (0, -1),  # Up
+        (1, 0),   # Right
+        (0, 1),   # Down
+        (-1, 0)   # Left
+    ]
+
+    def __init__(
+        self,
+        maze: Maze
+    ):
+        self.maze = maze
+
+    @abstractmethod
+    def solve(self) -> list[Cell] | None:
+        """Solve the maze and return the path from entry to exit."""
+        raise NotImplementedError()
+
+
+class MazeRenderer(ABC, Generic[T]):
+    name: str
+
+    def __init__(
+        self,
+        maze: Maze
+    ):
+        self.maze = maze
+
+    @abstractmethod
+    def render(self) -> T:
+        """Render the maze and return the result."""
+        raise NotImplementedError()
+
+    def display(self) -> None:
+        """Display the rendered maze."""
+        print(self.render())
+
+
 class MazeHook(Protocol):
+    stage: Literal["pre", "post"]
+
     def __call__(self, maze: Maze) -> Maze: ...

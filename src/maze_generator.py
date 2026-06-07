@@ -23,13 +23,11 @@ class MazeGenerator:
         cls,
         width: int,
         height: int,
+        algo: str | Type[MazeAlgorithm] = "dfs",
         entry_point: tuple = (0, 0),
         exit_point: tuple | None = None,
         seed: int | None = None,
-        algo: str | None = None,
-        custom_algo: Type[MazeAlgorithm] | None = None,
-        pre_hooks: list[MazeHook] | None = None,
-        post_hooks: list[MazeHook] | None = None,
+        hooks: list[MazeHook] | None = None
     ) -> Maze:
         maze = Maze(
             width=width,
@@ -38,10 +36,16 @@ class MazeGenerator:
             exit_point=exit_point or (width - 1, height - 1)
         )
 
+        pre_hooks = [hook for hook in hooks or [] if hook.stage == "pre"]
+        post_hooks = [hook for hook in hooks or [] if hook.stage == "post"]
+
         for hook in pre_hooks or []:
             maze = hook(maze)
 
-        algo_class = custom_algo or cls.ALGO_MAP.get(algo)
+        algo_class = algo
+        if isinstance(algo, str):
+            algo_class = cls.ALGO_MAP.get(algo or '')
+
         if algo_class is None:
             raise ValueError(f"Unsupported algorithm: {algo}")
 

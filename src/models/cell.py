@@ -2,10 +2,10 @@ from typing import ClassVar
 
 
 class Cell:
-    TOP: ClassVar[int] = 0b1000
-    RIGHT: ClassVar[int] = 0b0100
-    BOTTOM: ClassVar[int] = 0b0010
-    LEFT: ClassVar[int] = 0b0001
+    NORTH: ClassVar[int] = 0b0001
+    EAST:  ClassVar[int] = 0b0010
+    SOUTH: ClassVar[int] = 0b0100
+    WEST:  ClassVar[int] = 0b1000
 
     def __init__(
         self,
@@ -25,7 +25,8 @@ class Cell:
         self,
         direction: int
     ) -> None:
-        self._validate_direction(value=direction)
+        if not self.has_wall(direction):
+            return
         self.walls &= ~direction
 
     def has_wall(self, direction: int) -> bool:
@@ -33,24 +34,31 @@ class Cell:
         self._validate_direction(value=direction)
         return (self.walls & direction) != 0
 
-    def remove_walls_between(self, other: 'Cell') -> None:
+    def remove_walls_between(
+        self,
+        other: 'Cell',
+        force: bool = False
+    ) -> None:
         """Remove walls between this cell and another cell."""
+        if not force and (self.blocked or other.blocked):
+            return
+
         self._validate_cell_between(other)
         dx = other.x - self.x
         dy = other.y - self.y
 
         if dx == 1:
-            self.remove_wall(Cell.RIGHT)
-            other.remove_wall(Cell.LEFT)
+            self.remove_wall(Cell.SOUTH)
+            other.remove_wall(Cell.NORTH)
         elif dx == -1:
-            self.remove_wall(Cell.LEFT)
-            other.remove_wall(Cell.RIGHT)
+            self.remove_wall(Cell.NORTH)
+            other.remove_wall(Cell.SOUTH)
         elif dy == 1:
-            self.remove_wall(Cell.BOTTOM)
-            other.remove_wall(Cell.TOP)
+            self.remove_wall(Cell.EAST)
+            other.remove_wall(Cell.WEST)
         elif dy == -1:
-            self.remove_wall(Cell.TOP)
-            other.remove_wall(Cell.BOTTOM)
+            self.remove_wall(Cell.WEST)
+            other.remove_wall(Cell.EAST)
 
     def _validate_direction(
         self,
