@@ -110,7 +110,7 @@ class Add42Pattern(MazeHook):
     stage = "pre"
 
     def __call__(self, maze: Maze) -> Maze:
-        ox = maze.width // 2 - 3
+        ox = maze.width // 2 - 4  # 3
         oy = maze.height // 2 - 2
         maze.add_blocked_cells(settings.pattern_42, offset=(ox, oy))
         return maze
