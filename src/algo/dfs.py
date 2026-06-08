@@ -1,6 +1,8 @@
+from typing import Generator
 from interfaces import MazeAlgorithm
 
 from random import Random
+from models.maze import Maze
 
 
 class DFSMazeGenerator(MazeAlgorithm):
@@ -8,10 +10,22 @@ class DFSMazeGenerator(MazeAlgorithm):
 
     def generate(self, seed: int | None = None) -> None:
         """Generate a maze using the Depth-First Search algorithm."""
-        self._generate_dfs(seed)
+        for _ in self._generate_dfs(seed):
+            pass
         self._reset_visited()
 
-    def _generate_dfs(self, seed: int | None = None) -> None:
+    def generate_step(
+        self,
+        seed: int | None = None
+    ) -> Generator[Maze, None, None]:
+        """Generate a maze step-by-step using the Depth-First Search algorithm.""" # noqa
+        yield from self._generate_dfs(seed)
+        self._reset_visited()
+
+    def _generate_dfs(
+        self,
+        seed: int | None = None
+    ) -> Generator[Maze, None, None] | None:
         rng = Random(seed)
         stack = [self.maze.entry]
         self.maze.entry.visited = True
@@ -27,3 +41,4 @@ class DFSMazeGenerator(MazeAlgorithm):
                 next_cell.visited = True
             else:
                 stack.pop()
+            yield self.maze

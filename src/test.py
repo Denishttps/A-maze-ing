@@ -12,7 +12,7 @@ from solver.bfs import BFSMazeSolver
 from hooks import BreakPerfect, Add42Pattern
 
 
-width, height = 2, 1
+width, height = 20, 10
 
 maze = MazeGenerator.create(
     width=width,
@@ -20,8 +20,8 @@ maze = MazeGenerator.create(
     entry_point=(10, 9),
     exit_point=(19, 4),
     hooks=[
-        # BreakPerfect(percent=0.2, seed=42),
-        # Add42Pattern(),
+        BreakPerfect(percent=0.2, seed=42),
+        Add42Pattern(),
     ],
     seed=420,
     algo="wilson",

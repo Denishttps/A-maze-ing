@@ -1,17 +1,32 @@
 from random import Random
-
 from interfaces import MazeAlgorithm
+
 from models.cell import Cell
+from models.maze import Maze
+
+from typing import Generator
 
 
 class KruskalMazeGenerator(MazeAlgorithm):
     name = 'kruskal'
 
     def generate(self, seed: int | None = None) -> None:
-        self._generate_kruskal(seed)
+        for _ in self._generate_kruskal(seed):
+            pass
         self._reset_visited()
 
-    def _generate_kruskal(self, seed: int | None = None) -> None:
+    def generate_step(
+        self,
+        seed: int | None = None
+    ) -> Generator[Maze, None, None]:
+        """Generate a maze step-by-step using Kruskal's algorithm."""
+        yield from self._generate_kruskal(seed)
+        self._reset_visited()
+
+    def _generate_kruskal(
+        self,
+        seed: int | None = None
+    ) -> Generator[Maze, None, None] | None:
         rng = Random(seed)
 
         parent = {}
@@ -51,3 +66,4 @@ class KruskalMazeGenerator(MazeAlgorithm):
                 union(cell, neighbor)
                 cell.visited = True
                 neighbor.visited = True
+            yield self.maze

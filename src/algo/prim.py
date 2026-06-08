@@ -1,16 +1,31 @@
+from typing import Generator
+
 from interfaces import MazeAlgorithm
 
 from random import Random
+from models import Maze
 
 
 class PrimMazeGenerator(MazeAlgorithm):
     name = 'prim'
 
     def generate(self, seed: int | None = None) -> None:
-        self._generate_prim(seed)
+        for _ in self._generate_prim(seed):
+            pass
         self._reset_visited()
 
-    def _generate_prim(self, seed: int | None = None) -> None:
+    def generate_step(
+        self,
+        seed: int | None = None
+    ) -> Generator[Maze, None, None]:
+        """Generate a maze step-by-step using Prim's algorithm."""
+        yield from self._generate_prim(seed)
+        self._reset_visited()
+
+    def _generate_prim(
+        self,
+        seed: int | None = None
+    ) -> Generator[Maze, None, None]:
         rng = Random(seed)
 
         start = self.maze.entry
@@ -31,3 +46,4 @@ class PrimMazeGenerator(MazeAlgorithm):
                     c for c in self._get_neighbors(cell, visited=False)
                     if c not in frontier
                 )
+            yield self.maze
