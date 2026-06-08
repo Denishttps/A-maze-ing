@@ -5,8 +5,10 @@ from config import settings
 
 from algo.hooks import Add42Pattern, BreakPerfect
 from models.cell import Cell
+
 from models.maze import Maze
 from renderer.ascii import AsciiMazeRenderer
+
 from utils.renderer import get_walls_between
 
 from solver.bfs import BFSMazeSolver
