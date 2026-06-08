@@ -8,6 +8,7 @@ dependencies = [
     "flake8>=7.3.0",
     "mypy>=2.1.0",
     "pydantic>=2.13.4",
+    "pydantic-settings>=2.14.1",
     "python-dotenv>=1.2.2",
     "rich>=15.0.0",
 ]

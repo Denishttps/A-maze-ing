@@ -58,13 +58,10 @@ class AsciiMazeRenderer(MazeRenderer[str]):
         self._render_entry_exit()
 
     def _render_entry_exit(self) -> None:
-        wall_exit = self._get_exit_wall(self.maze.exit)
-        wall_entry = self._get_exit_wall(self.maze.entry)
-
-        exit_wall_coords = self._get_wall_coords(self.maze.exit, wall_exit)
-        entry_wall_coords = self._get_wall_coords(self.maze.entry, wall_entry)
-        self.renderer[entry_wall_coords[1]][entry_wall_coords[0]] = 4
-        self.renderer[exit_wall_coords[1]][exit_wall_coords[0]] = 5
+        en_x, en_y = self.maze.entry.x * 2 + 1, self.maze.entry.y * 2 + 1
+        ex_x, ex_y = self.maze.exit.x * 2 + 1, self.maze.exit.y * 2 + 1
+        self.renderer[en_y][en_x] = 4
+        self.renderer[ex_y][ex_x] = 5
 
     def _get_exit_wall(self, cell: Cell) -> tuple[int, int]:
         if cell.y == 0:

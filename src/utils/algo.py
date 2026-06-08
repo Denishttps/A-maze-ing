@@ -10,7 +10,7 @@ def break_perfect(
     seed: int | None = None
 ) -> None:
     rng = Random(seed)
-    walls = []
+    walls: list[tuple[Cell, Cell]] = []
 
     for y in range(maze.height):
         for x in range(maze.width):

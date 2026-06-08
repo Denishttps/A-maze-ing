@@ -1,22 +1,6 @@
-from config import settings
+from exceptions import MazeSizeError
 from interfaces import MazeHook
-
-from models.cell import Cell
-from utils.algo import break_perfect
-
-from models.maze import Maze
-
-
-class BreakPerfect(MazeHook):
-    stage = "post"
-
-    def __init__(self, percent: float = 0.1, seed: int | None = None):
-        self.percent = percent
-        self.seed = seed
-
-    def __call__(self, maze: Maze) -> Maze:
-        break_perfect(maze, percent=self.percent, seed=self.seed)
-        return maze
+from models import Maze, Cell
 
 
 class AddBlockedArea(MazeHook):
@@ -51,7 +35,7 @@ class AddBlockedArea(MazeHook):
             ]
         start, end = self._get_coordinates(maze)
         if end[0] > maze.width or end[1] > maze.height:
-            raise ValueError(
+            raise MazeSizeError(
                 "Blocked area exceeds maze boundaries."
             )
         self._add_blocked_area(maze)
@@ -104,13 +88,3 @@ class AddBlockedArea(MazeHook):
             except ValueError:
                 raise ValueError(f"Invalid y position: {y_str}")
         return x, y
-
-
-class Add42Pattern(MazeHook):
-    stage = "pre"
-
-    def __call__(self, maze: Maze) -> Maze:
-        ox = maze.width // 2 - 4  # 3
-        oy = maze.height // 2 - 2
-        maze.add_blocked_cells(settings.pattern_42, offset=(ox, oy))
-        return maze

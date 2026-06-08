@@ -1,5 +1,7 @@
 from typing import ClassVar
 
+from exceptions import MazeWallError
+
 
 class Cell:
     NORTH: ClassVar[int] = 0b0001
@@ -65,7 +67,7 @@ class Cell:
         value: int
     ) -> None:
         if value is not None and not (0 <= value <= 0b1111):
-            raise ValueError(
+            raise MazeWallError(
                 "Walls must be a 4-bit integer (0-15)."
             )
 
@@ -74,6 +76,14 @@ class Cell:
         dy = abs(other.y - self.y)
         if (dx == 1 and dy == 0) or (dx == 0 and dy == 1):
             return
-        raise ValueError(
+        raise MazeWallError(
             "Cells must be adjacent to remove walls between them."
         )
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Cell):
+            raise TypeError("Can only compare Cell with another Cell.")
+        return self.x == other.x and self.y == other.y
+
+    def __hash__(self) -> int:
+        return hash((self.x, self.y))
