@@ -1,4 +1,5 @@
 from collections import deque
+from random import randint
 
 from algo.dfs import DFSMazeGenerator
 from algo.kruskal import KruskalMazeGenerator
@@ -11,10 +12,11 @@ from exceptions import (
     MazeError,
     MazeSizeError
 )
-from models.maze import Maze
-from typing import Type
 
-from interfaces import MazeAlgorithm, MazeHook
+from models.maze import Maze
+from models.maze_config import MazeConfig
+
+from typing import Generator
 
 
 class MazeGenerator:
@@ -26,32 +28,43 @@ class MazeGenerator:
     }
 
     @classmethod
-    def create(
+    def create(cls, config: MazeConfig) -> Maze:
+        for maze in cls._build(config):
+            pass
+        return maze
+
+    @classmethod
+    def create_animated(
         cls,
-        width: int,
-        height: int,
-        algo: str | Type[MazeAlgorithm] = "dfs",
-        entry_point: tuple = (0, 0),
-        exit_point: tuple | None = None,
-        seed: int | None = None,
-        hooks: list[MazeHook] | None = None
-    ) -> Maze:
+        config: MazeConfig
+    ) -> Generator[Maze, None, None]:
+        yield from cls._build(config, animated=True)
+
+    @classmethod
+    def _build(
+        cls,
+        cfg: MazeConfig,
+        animated: bool = False
+    ) -> Generator[Maze, None, None]:
         maze = Maze(
-            width=width,
-            height=height,
-            entry_point=entry_point,
-            exit_point=exit_point or (width - 1, height - 1)
+            width=cfg.width,
+            height=cfg.height,
+            entry_point=cfg.entry_point,
+            exit_point=cfg.exit_point or (cfg.width - 1, cfg.height - 1)
         )
 
-        pre_hooks = [hook for hook in hooks or [] if hook.stage == "pre"]
-        post_hooks = [hook for hook in hooks or [] if hook.stage == "post"]
+        if cfg.seed is None:
+            seed = randint(1, 100000000000000)
 
-        algo_class = algo
-        if isinstance(algo, str):
-            algo_class = cls.ALGO_MAP.get(algo or '')
+        pre_hooks = [hook for hook in cfg.hooks or [] if hook.stage == "pre"]
+        post_hooks = [hook for hook in cfg.hooks or [] if hook.stage == "post"]
+
+        algo_class = cfg.algo
+        if isinstance(cfg.algo, str):
+            algo_class = cls.ALGO_MAP.get(cfg.algo or '')
 
         if algo_class is None:
-            raise MazeError(f"Unsupported algorithm: {algo}")
+            raise MazeError(f"Unsupported algorithm: {cfg.algo}")
 
         for hook in pre_hooks or []:
             maze = hook(maze)
@@ -59,7 +72,11 @@ class MazeGenerator:
         cls._validate(maze)
 
         algorithm = algo_class(maze=maze)
-        algorithm.generate(seed=seed)
+        if animated:
+            yield from algorithm.generate_step(seed=seed)
+        else:
+            algorithm.generate(seed=seed)
+            yield maze
 
         maze.seed = seed
         maze.algorithm = algo_class.name

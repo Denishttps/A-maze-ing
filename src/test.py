@@ -11,21 +11,22 @@ from renderer.ascii import AsciiMazeRenderer
 from solver.bfs import BFSMazeSolver
 from hooks import BreakPerfect, Add42Pattern
 
+from models.maze_config import MazeConfig
 
-width, height = 20, 10
 
-maze = MazeGenerator.create(
-    width=width,
-    height=height,
-    entry_point=(10, 9),
-    exit_point=(19, 4),
+cfg = MazeConfig(
+    width=20,
+    height=10,
+    entry_point=(19, 9),
+    exit_point=(1, 1),
     hooks=[
-        BreakPerfect(percent=0.2, seed=42),
         Add42Pattern(),
+        BreakPerfect(percent=0.1, seed=420)
     ],
-    seed=420,
-    algo="wilson",
+    algo="dfs"
 )
+
+maze = MazeGenerator.create(config=cfg)
 
 colors = [
     (200, 200, 200),  # cell
@@ -33,8 +34,6 @@ colors = [
     (200, 200, 200),  # blocked wall
     (255, 255, 0),    # path
 ]
-
-# maze.open_entry_exit()
 
 path = BFSMazeSolver(maze).solve()
 

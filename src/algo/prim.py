@@ -3,7 +3,7 @@ from typing import Generator
 from interfaces import MazeAlgorithm
 
 from random import Random
-from models import Maze
+from models.maze import Maze
 
 
 class PrimMazeGenerator(MazeAlgorithm):
@@ -28,7 +28,7 @@ class PrimMazeGenerator(MazeAlgorithm):
     ) -> Generator[Maze, None, None]:
         rng = Random(seed)
 
-        start = self.maze.entry
+        start = self.maze.get_cell(0, 0)
         start.visited = True
 
         frontier = self._get_neighbors(start, visited=False)

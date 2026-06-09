@@ -2,7 +2,7 @@ from config import Settings
 from exceptions import MazeSizeError
 
 from interfaces import MazeHook
-from models import Maze
+from models.maze import Maze
 
 
 class Add42Pattern(MazeHook):

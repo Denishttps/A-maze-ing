@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import ClassVar, Literal, Protocol, Generic, TypeVar
+from typing import ClassVar, Literal, Protocol, Generic, TypeVar, Generator # noqa
 
 from models.cell import Cell
 from models.maze import Maze
@@ -26,10 +26,17 @@ class MazeAlgorithm(ABC):
     @abstractmethod
     def generate(
         self,
-        seed: int | None = None
+        seed: int
     ) -> None:
         """Generate a maze with the specified parameters."""
         raise NotImplementedError()
+
+    def generate_step(
+        self,
+        seed: int
+    ) -> Generator[Maze, None, None]:
+        self.generate(seed)
+        yield self.maze
 
     def _get_neighbors(
         self,

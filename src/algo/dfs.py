@@ -8,7 +8,7 @@ from models.maze import Maze
 class DFSMazeGenerator(MazeAlgorithm):
     name = "dfs"
 
-    def generate(self, seed: int | None = None) -> None:
+    def generate(self, seed: int) -> None:
         """Generate a maze using the Depth-First Search algorithm."""
         for _ in self._generate_dfs(seed):
             pass
@@ -16,7 +16,7 @@ class DFSMazeGenerator(MazeAlgorithm):
 
     def generate_step(
         self,
-        seed: int | None = None
+        seed: int
     ) -> Generator[Maze, None, None]:
         """Generate a maze step-by-step using the Depth-First Search algorithm.""" # noqa
         yield from self._generate_dfs(seed)
@@ -24,11 +24,12 @@ class DFSMazeGenerator(MazeAlgorithm):
 
     def _generate_dfs(
         self,
-        seed: int | None = None
+        seed: int
     ) -> Generator[Maze, None, None] | None:
         rng = Random(seed)
-        stack = [self.maze.entry]
-        self.maze.entry.visited = True
+        first_cell = self.maze.get_cell(0, 0)
+        stack = [first_cell]
+        first_cell.visited = True
 
         while stack:
             current_cell = stack[-1]
