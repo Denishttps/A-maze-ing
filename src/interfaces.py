@@ -1,0 +1,104 @@
+from abc import ABC, abstractmethod
+from typing import ClassVar, Literal, Protocol, Generic, TypeVar, Generator # noqa
+
+from models.cell import Cell
+from models.maze import Maze
+
+
+T = TypeVar('T')
+
+
+class MazeAlgorithm(ABC):
+    name: str
+    _DIRECTIONS: ClassVar[list[tuple[int, int]]] = [
+        (0, -1),  # NORTH
+        (1, 0),   # EAST
+        (0, 1),   # SOUTH
+        (-1, 0)   # WEST
+    ]
+
+    def __init__(
+        self,
+        maze: Maze
+    ):
+        self.maze = maze
+
+    @abstractmethod
+    def generate(
+        self,
+        seed: int
+    ) -> None:
+        """Generate a maze with the specified parameters."""
+        raise NotImplementedError()
+
+    def generate_step(
+        self,
+        seed: int
+    ) -> Generator[Maze, None, None]:
+        self.generate(seed)
+        yield self.maze
+
+    def _get_neighbors(
+        self,
+        cell: Cell,
+        visited: bool | None = None
+    ) -> list[Cell]:
+        neighbors = []
+        for dx, dy in self._DIRECTIONS:
+            neighbor = self.maze.get_cell(cell.x + dx, cell.y + dy)
+            if neighbor and not neighbor.blocked:
+                if visited is None or neighbor.visited == visited:
+                    neighbors.append(neighbor)
+        return neighbors
+
+    def _reset_visited(self) -> None:
+        for row in self.maze.grid:
+            for cell in row:
+                cell.visited = False
+
+
+class MazeSolver(ABC):
+    name: str
+
+    _DIRECTIONS: ClassVar[list[tuple[int, int]]] = [
+        (0, -1),  # NORTH
+        (1, 0),   # EAST
+        (0, 1),   # SOUTH
+        (-1, 0)   # WEST
+    ]
+
+    def __init__(
+        self,
+        maze: Maze
+    ):
+        self.maze = maze
+
+    @abstractmethod
+    def solve(self) -> list[Cell] | None:
+        """Solve the maze and return the path from entry to exit."""
+        raise NotImplementedError()
+
+
+class MazeRenderer(ABC, Generic[T]):
+    name: str
+
+    def __init__(
+        self,
+        maze: Maze
+    ):
+        self.maze = maze
+
+    @abstractmethod
+    def render(self) -> T:
+        """Render the maze and return the result."""
+        raise NotImplementedError()
+
+    def display(self) -> None:
+        """Display the rendered maze."""
+        print(self.render())
+
+
+class MazeHook(Protocol):
+    stage: Literal["pre", "post"]
+
+    def __call__(self, maze: Maze) -> Maze: ...
