@@ -429,10 +429,3 @@ The project was planned in the following phases:
 - [Pydantic Documentation](https://docs.pydantic.dev/)
 
 ### AI Usage
-
-AI tools were used to assist with the following tasks:
-- Generating boilerplate documentation structure
-- Reviewing code for type-hint completeness
-- Exploring algorithm trade-offs and comparisons
-
-All AI-generated content was reviewed, understood, and validated by the team before inclusion.
