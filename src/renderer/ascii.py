@@ -23,6 +23,7 @@ class AsciiMazeRenderer(MazeRenderer[str]):
         ]
         self.output_str = ""
         self.colors = self.set_colors(colors)
+        self.connect = True
 
     def set_colors(
         self,
@@ -52,8 +53,10 @@ class AsciiMazeRenderer(MazeRenderer[str]):
                 self.renderer[y][x] = 0
                 self._render_cell_walls(cell, x, y)
 
-        if self.path:
+        if self.path and self.connect:
             self._render_path()
+        elif self.path:
+            self._render_explored()
 
         self._render_entry_exit()
 
@@ -150,6 +153,11 @@ class AsciiMazeRenderer(MazeRenderer[str]):
                 next_cell = self.path[i + 1]
                 nx, ny = next_cell.x * 2 + 1, next_cell.y * 2 + 1
                 self.renderer[(y + ny) // 2][(x + nx) // 2] = 3
+
+    def _render_explored(self) -> None:
+        for cell in self.path:
+            x, y = cell.x * 2 + 1, cell.y * 2 + 1
+            self.renderer[y][x] = 3
 
     def _default_colors(self) -> list[tuple[int, int, int]]:
         return [

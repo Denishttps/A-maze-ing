@@ -19,13 +19,13 @@ from rich.live import Live
 
 
 cfg = MazeConfig(
-    width=20,
-    height=10,
-    entry_point=(19, 9),
-    exit_point=(1, 1),
+    width=25,
+    height=15,
+    entry_point=(0, 0),
+    exit_point=(24, 14),
     hooks=[
         Add42Pattern(),
-        # BreakPerfect(percent=0.1, seed=420)
+        BreakPerfect(percent=0.1, seed=420)
     ],
     algo="prim",
 )
@@ -37,17 +37,27 @@ colors = [
     (37, 150, 190),   # wall
     (200, 200, 200),  # blocked wall
     (255, 255, 0),    # path
+    (255, 0, 255),    # explored
+    (255, 0, 0),      # entry/exit
 ]
 
-# path = BFSMazeSolver(maze).solve()
 
-renderer = AsciiMazeRenderer(maze, path=None, colors=colors)
+renderer = AsciiMazeRenderer(maze)
+solver = BFSMazeSolver(maze)
 
+renderer.path = solver.solve()
+renderer.display()
+# exit(0)
 with Live(refresh_per_second=5) as live:
     for maze in MazeGenerator.create_animated(config=cfg):
-        renderer = AsciiMazeRenderer(maze, path=None, colors=colors)
+        renderer = AsciiMazeRenderer(maze, colors=colors)
         live.update(renderer.render())
-        time.sleep(0.05)
+        # time.sleep(0.1)
 
-# renderer.render()
-# renderer.display()
+    renderer.connect = False
+    for path in solver.solve_step():
+        if solver.is_solved:
+            renderer.connect = True
+        renderer.path = path
+        live.update(renderer.render())
+        # time.sleep(0.1)

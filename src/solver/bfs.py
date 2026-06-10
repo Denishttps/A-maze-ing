@@ -1,3 +1,5 @@
+from typing import Generator
+
 from interfaces import MazeSolver
 from models.cell import Cell
 
@@ -9,9 +11,16 @@ class BFSMazeSolver(MazeSolver):
 
     def solve(self) -> list[Cell] | None:
         """Solve the maze using the BFS algorithm."""
-        return self._bfs()
+        for path in self._bfs():
+            pass
+        self.is_solved = False
+        return path
 
-    def _bfs(self) -> list[Cell] | None:
+    def solve_step(self) -> Generator[list[Cell] | None, None, None]:
+        """Solve the maze step-by-step using the BFS algorithm."""
+        yield from self._bfs()
+
+    def _bfs(self) -> Generator[list[Cell] | None, None, None]:
         start = self.maze.entry
         end = self.maze.exit
 
@@ -22,14 +31,22 @@ class BFSMazeSolver(MazeSolver):
             cell = queue.popleft()
 
             if cell == end:
-                return self._reconstruct(came_from, end)
+                self.is_solved = True
+                path = self._reconstruct(came_from, end)
+                for i in range(1, len(path) + 1):
+                    yield path[:i]
+                else:
+                    yield path
+                return
 
             for neighbor in self._get_passable_neighbors(cell):
                 if neighbor in came_from:
                     continue
                 came_from[neighbor] = cell
                 queue.append(neighbor)
-        return None
+                yield list(came_from.keys())
+
+        yield []
 
     def _reconstruct(
         self,

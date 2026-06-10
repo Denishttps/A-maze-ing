@@ -72,11 +72,17 @@ class MazeSolver(ABC):
         maze: Maze
     ):
         self.maze = maze
+        self.is_solved = False
 
     @abstractmethod
     def solve(self) -> list[Cell] | None:
         """Solve the maze and return the path from entry to exit."""
         raise NotImplementedError()
+
+    def solve_step(self) -> Generator[list[Cell] | None, None, None]:
+        """Solve the maze step-by-step and yield the current path."""
+        path = self.solve()
+        yield path
 
 
 class MazeRenderer(ABC, Generic[T]):
