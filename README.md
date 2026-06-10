@@ -1,4 +1,4 @@
-This project has been created as part of the 42 curriculum by dbobrov[, ymarmoud]
+This project has been created as part of the 42 curriculum by dbobrov, ymarmoud
 
 # A-Maze-ing
 
@@ -381,6 +381,7 @@ Each directory in `src/` has its own `README.md` with detailed documentation:
 | Member | Role |
 |---|---|
 | **dbobrov** | Full-stack developer — architecture, algorithms, rendering, documentation |
+| **ymarmoud**| pytest test suite, README documentation, package, verification and build
 
 ### Planning & Evolution
 

@@ -27,7 +27,6 @@ class Maze:
     def get_cell(self, x: int, y: int) -> Cell | None:
         if x < 0 or y < 0 or x >= self.width or y >= self.height:
             return None
-            # raise InvalidEntryExitError(f"Cell ({x}, {y}) is out of bounds.")
         return self.grid[y][x]
 
     def open_entry_exit(self) -> None:

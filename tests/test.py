@@ -23,9 +23,9 @@ from rich.live import Live
 
 
 cfg = MazeConfig(
-    width=20,
-    height=10,
-    entry_point=(19, 9),
+    width=8,
+    height=7,
+    entry_point=(7, 6),
     exit_point=(1, 1),
     hooks=[
         Add42Pattern(),
