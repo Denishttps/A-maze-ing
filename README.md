@@ -1,6 +1,6 @@
-This project has been created as part of the 42 curriculum by dbobrov[, <login2>]
+This project has been created as part of the 42 curriculum by dbobrov[, ymarmoud]
 
-# A-Maze-ing 🏗️
+# A-Maze-ing
 
 > Create your own maze generator and display its result!
 
