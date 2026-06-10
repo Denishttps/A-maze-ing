@@ -17,6 +17,8 @@ from models.maze_config import MazeConfig
 
 from rich.live import Live
 
+from maze_solver import MazeSolver
+
 
 cfg = MazeConfig(
     width=25,
@@ -42,10 +44,8 @@ colors = [
 ]
 
 
-renderer = AsciiMazeRenderer(maze)
-solver = BFSMazeSolver(maze)
-
-renderer.path = solver.solve()
+path = MazeSolver.solve(maze)
+renderer = AsciiMazeRenderer(maze, path, colors)
 renderer.display()
 # exit(0)
 with Live(refresh_per_second=5) as live:
@@ -54,10 +54,8 @@ with Live(refresh_per_second=5) as live:
         live.update(renderer.render())
         # time.sleep(0.1)
 
-    renderer.connect = False
-    for path in solver.solve_step():
-        if solver.is_solved:
-            renderer.connect = True
+    for path, is_final in MazeSolver.solve_animated(maze):
+        renderer.connect = is_final
         renderer.path = path
         live.update(renderer.render())
         # time.sleep(0.1)

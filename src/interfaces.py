@@ -72,7 +72,6 @@ class MazeSolver(ABC):
         maze: Maze
     ):
         self.maze = maze
-        self.is_solved = False
 
     @abstractmethod
     def solve(self) -> list[Cell] | None:

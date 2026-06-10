@@ -11,16 +11,15 @@ class BFSMazeSolver(MazeSolver):
 
     def solve(self) -> list[Cell] | None:
         """Solve the maze using the BFS algorithm."""
-        for path in self._bfs():
+        for path, _ in self._bfs():
             pass
-        self.is_solved = False
         return path
 
-    def solve_step(self) -> Generator[list[Cell] | None, None, None]:
+    def solve_step(self) -> Generator[tuple[list[Cell] | None, bool], None, None]: # noqa
         """Solve the maze step-by-step using the BFS algorithm."""
         yield from self._bfs()
 
-    def _bfs(self) -> Generator[list[Cell] | None, None, None]:
+    def _bfs(self) -> Generator[tuple[list[Cell] | None, bool], None, None]:
         start = self.maze.entry
         end = self.maze.exit
 
@@ -31,12 +30,9 @@ class BFSMazeSolver(MazeSolver):
             cell = queue.popleft()
 
             if cell == end:
-                self.is_solved = True
                 path = self._reconstruct(came_from, end)
                 for i in range(1, len(path) + 1):
-                    yield path[:i]
-                else:
-                    yield path
+                    yield path[:i], True
                 return
 
             for neighbor in self._get_passable_neighbors(cell):
@@ -44,7 +40,7 @@ class BFSMazeSolver(MazeSolver):
                     continue
                 came_from[neighbor] = cell
                 queue.append(neighbor)
-                yield list(came_from.keys())
+                yield list(came_from.keys()), False
 
         yield []
 
