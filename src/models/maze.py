@@ -18,7 +18,7 @@ class Maze:
         self.entry = self.get_cell(*entry_point)
         self.exit = self.get_cell(*(exit_point or (width - 1, height - 1)))
         self.seed: int | None = None
-        self.algorithm: str | None = None
+        self.algo: str | None = None
 
     def get_cell(self, x: int, y: int) -> Cell | None:
         if x < 0 or y < 0 or x >= self.width or y >= self.height:

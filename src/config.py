@@ -2,12 +2,13 @@ from pydantic import Field, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from typing import ClassVar
-from pathlib import Path
+
+import sys
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=Path(__file__).parent.parent / "config.txt",
+        env_file=sys.argv[1] if len(sys.argv) > 1 else None,
         env_file_encoding="utf-8",
     )
 
@@ -17,6 +18,7 @@ class Settings(BaseSettings):
     ]
     wall: ClassVar[str] = "\u2588\u2588"
     cell: ClassVar[str] = "  "
+    cell = wall
     path: ClassVar[str] = "\u2591\u2591"
     width: int
     height: int

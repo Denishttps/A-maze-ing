@@ -79,7 +79,7 @@ class MazeGenerator:
             yield maze
 
         maze.seed = cfg.seed
-        maze.algorithm = algo_class.name
+        maze.algo = algo_class.name
 
         for hook in post_hooks or []:
             maze = hook(maze)

@@ -39,8 +39,8 @@ colors = [
     (37, 150, 190),   # wall
     (200, 200, 200),  # blocked wall
     (255, 255, 0),    # path
-    (255, 0, 255),    # explored
-    (255, 0, 0),      # entry/exit
+    (255, 0, 255),    # entry
+    (255, 0, 0),      # exit
 ]
 
 

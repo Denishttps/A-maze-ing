@@ -2,8 +2,9 @@ from interfaces import MazeRenderer
 from models.cell import Cell
 
 from config import settings
-from models.maze import Maze
+from models.theme import Theme
 
+from models.maze import Maze
 from rich import print as rich_print
 
 
@@ -13,8 +14,8 @@ class AsciiMazeRenderer(MazeRenderer[str]):
     def __init__(
         self,
         maze: Maze,
+        colors: Theme | None = None,
         path: list[Cell] | None = None,
-        colors: list[tuple[int, int, int]] | None = None
     ):
         super().__init__(maze)
         self.path = path
@@ -22,18 +23,8 @@ class AsciiMazeRenderer(MazeRenderer[str]):
             [1] * (maze.width * 2 + 1) for _ in range(maze.height * 2 + 1)
         ]
         self.output_str = ""
-        self.colors = self.set_colors(colors)
+        self.colors = colors or Theme()
         self.connect = True
-
-    def set_colors(
-        self,
-        colors: list[tuple[int, int, int]] | None
-    ) -> list[tuple[int, int, int]]:
-        if colors is None or len(colors) != 4:
-            return self._default_colors()
-        colors.append((255, 0, 255))
-        colors.append((255, 0, 0))
-        return colors
 
     def render(self) -> str:
         self._render_all()
@@ -92,24 +83,22 @@ class AsciiMazeRenderer(MazeRenderer[str]):
         for row in self.renderer:
             for cell in row:
                 if cell == 0:
-                    s += self._get_colored_str(settings.cell, self.colors[0])
+                    s += self._get_colored_str(settings.cell, self.colors.cell)
                 elif cell == 1:
-                    s += self._get_colored_str(settings.wall, self.colors[1])
+                    s += self._get_colored_str(settings.wall, self.colors.wall)
                 elif cell == 2:
-                    s += self._get_colored_str(settings.wall, self.colors[2])
+                    s += self._get_colored_str(settings.wall, self.colors.blocked_cell) # noqa
                 elif cell == 3:
-                    s += self._get_colored_str(settings.path, self.colors[3])
+                    s += self._get_colored_str(settings.path, self.colors.path)
                 elif cell == 4:
-                    s += self._get_colored_str(settings.path, self.colors[4])
+                    s += self._get_colored_str(settings.path, self.colors.entry) # noqa
                 elif cell == 5:
-                    s += self._get_colored_str(settings.path, self.colors[5])
+                    s += self._get_colored_str(settings.path, self.colors.exit)
             s += "\n"
         return s
 
-    def _get_colored_str(self, chrs: str, c: tuple[int, int, int]) -> str:
-        r, g, b = c
-        rgb_str = f"rgb({r},{g},{b})"
-        return f"[{rgb_str}]{chrs}[/{rgb_str}]"
+    def _get_colored_str(self, chrs: str, color: str) -> str:
+        return f"[{color}]{chrs}[/{color}]"
 
     def _render_blocked_cells(
         self,
