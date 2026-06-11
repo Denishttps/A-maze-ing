@@ -31,7 +31,6 @@ class MazeGenerator:
     def create(cls, config: MazeConfig):
         for maze in cls._build(config):
             pass
-        print("Generating maze...")
         return maze
 
     @classmethod

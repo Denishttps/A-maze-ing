@@ -57,7 +57,7 @@ class MazeAlgorithm(ABC):
                 cell.visited = False
 
 
-class MazeSolver(ABC):
+class BaseMazeSolver(ABC):
     name: str
 
     _DIRECTIONS: ClassVar[list[tuple[int, int]]] = [

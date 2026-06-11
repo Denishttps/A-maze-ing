@@ -3,7 +3,7 @@ from typing import Generator, Type
 from models.cell import Cell
 from models.maze import Maze
 
-from interfaces import MazeSolver as MazeSolverBase
+from interfaces import BaseMazeSolver as MazeSolverBase
 from exceptions import MazeError
 
 from solver.bfs import BFSMazeSolver

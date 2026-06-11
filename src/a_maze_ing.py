@@ -7,6 +7,9 @@ from dispatcher import Dispatcher
 from models.theme import Theme
 
 from models.maze import Maze
+from config import settings
+
+from utils.file import save_maze_to_file
 from utils.maze_config import make_maze_config
 
 from utils.ui import build_ui, get_next_theme
@@ -20,7 +23,7 @@ dp = Dispatcher()
 maze_config = make_maze_config()
 
 
-def _render_maze(live: Live, maze: Maze, theme: Theme) -> AsciiMazeRenderer:
+def render_maze(live: Live, maze: Maze, theme: Theme) -> AsciiMazeRenderer:
     path = dp.data.get('path') if dp.data.get('is_path_shown') else None
     renderer = AsciiMazeRenderer(maze, colors=theme, path=path)
     live.update(build_ui(
@@ -33,10 +36,20 @@ def _render_maze(live: Live, maze: Maze, theme: Theme) -> AsciiMazeRenderer:
     return renderer
 
 
-def _refresh_path(maze: Maze) -> None:
+def refresh_path(maze: Maze) -> None:
     if dp.data.get('path'):
         dp.data['path'] = MazeSolver.solve(maze)
         dp.data['is_new_maze'] = False
+
+
+def save_file() -> None:
+    maze = dp.data['maze']
+    path = dp.data.get('path')
+    if not path:
+        path = MazeSolver.solve(maze)
+        dp.data['path'] = path
+        dp.data['is_new_maze'] = False
+    save_maze_to_file(maze, path, settings.output_file)
 
 
 @dp.startup
@@ -46,7 +59,8 @@ def startup(live: Live) -> None:
     dp.data['maze'] = maze
     dp.data['theme'] = theme
     dp.data['is_new_maze'] = True
-    _render_maze(live, maze, theme)
+    render_maze(live, maze, theme)
+    save_file()
 
 
 @dp.shutdown
@@ -60,15 +74,16 @@ def regenerate_maze(live: Live, theme: Theme) -> None:
     maze = MazeGenerator.create(config=maze_config)
     dp.data['is_new_maze'] = True
     dp.data['maze'] = maze
-    _refresh_path(maze)
-    _render_maze(live, maze, theme)
+    refresh_path(maze)
+    render_maze(live, maze, theme)
+    save_file()
 
 
 @dp.on('s', help="Swap colors")
 def swap_colors(live: Live, maze: Maze, theme_gen: Generator) -> None:
     theme = next(theme_gen)
     dp.data['theme'] = theme
-    _render_maze(live, maze, theme)
+    render_maze(live, maze, theme)
 
 
 @dp.on('p', help="Show/hide the solution path")
@@ -81,14 +96,14 @@ def solve_maze(live: Live, maze: Maze, theme: Theme) -> None:
             dp.data['path'] = MazeSolver.solve(maze)
             dp.data['is_new_maze'] = False
 
-    _render_maze(live, maze, theme)
+    render_maze(live, maze, theme)
 
 
 @dp.on('a', help="Animate the maze generation and solving")
 def animate_maze_path(live: Live, theme: Theme) -> None:
     dp.data['is_path_shown'] = False
     for maze in MazeGenerator.create_animated(config=maze_config):
-        renderer = _render_maze(live, maze, theme)
+        renderer = render_maze(live, maze, theme)
 
     for path, is_final in MazeSolver.solve_animated(maze):
         renderer.connect = is_final
@@ -108,7 +123,7 @@ def animate_maze_path(live: Live, theme: Theme) -> None:
 @dp.on("m", help="Animate the maze generation")
 def animate_maze(live: Live, theme: Theme) -> None:
     for maze in MazeGenerator.create_animated(config=maze_config):
-        _render_maze(live, maze, theme)
+        render_maze(live, maze, theme)
 
 
 @dp.on("t", help="Animate the maze solving")
@@ -137,8 +152,9 @@ def swap_algorithm(live: Live, maze: Maze, theme: Theme) -> None:
     maze_config.algo = next_algo
     maze = MazeGenerator.create(config=maze_config)
     dp.data['maze'] = maze
-    _refresh_path(maze)
-    _render_maze(live, maze, theme)
+    refresh_path(maze)
+    render_maze(live, maze, theme)
+    save_file()
 
 
 @dp.on('q', help="Quit the application")

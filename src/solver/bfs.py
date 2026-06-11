@@ -1,12 +1,12 @@
 from typing import Generator
 
-from interfaces import MazeSolver
+from interfaces import BaseMazeSolver
 from models.cell import Cell
 
 from collections import deque
 
 
-class BFSMazeSolver(MazeSolver):
+class BFSMazeSolver(BaseMazeSolver):
     name = "BFS"
 
     def solve(self) -> list[Cell] | None:
