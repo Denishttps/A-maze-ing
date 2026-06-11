@@ -67,7 +67,7 @@ class Dispatcher:
                     continue
         return kw
 
-    def run(self) -> None:
+    def run(self, refresh_per_second: int = 10) -> None:
         self._running = True
         _busy = False
         key_queue = queue.Queue()
@@ -81,7 +81,7 @@ class Dispatcher:
         reader = threading.Thread(target=read_keys, daemon=True)
         reader.start()
 
-        with Live(refresh_per_second=10, screen=True) as live:
+        with Live(refresh_per_second=refresh_per_second, screen=True) as live:
             self.data['live'] = live
 
             if self._startup:
