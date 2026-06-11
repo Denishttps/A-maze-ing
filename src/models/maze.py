@@ -1,5 +1,4 @@
 from models.cell import Cell
-from exceptions import InvalidEntryExitError
 
 
 class Maze:

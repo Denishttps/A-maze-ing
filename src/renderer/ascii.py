@@ -47,20 +47,24 @@ class AsciiMazeRenderer(MazeRenderer[str]):
         for y in range(1, self.maze.height * 2, 2):
             for x in range(1, self.maze.width * 2, 2):
                 cell = self.maze.get_cell(x // 2, y // 2)
+                # this line in case Cell is None to avoid mypy 
+                if cell is None:
+                    continue
                 if cell.blocked:
                     self._render_blocked_cells(x, y)
                     continue
                 self.renderer[y][x] = 0
                 self._render_cell_walls(cell, x, y)
-
         if self.path and self.connect:
             self._render_path()
         elif self.path:
             self._render_explored()
-
         self._render_entry_exit()
 
     def _render_entry_exit(self) -> None:
+        # also in case of None val and mypy avoid
+        if self.maze.entry is None or self.maze.exit is None:
+            return
         en_x, en_y = self.maze.entry.x * 2 + 1, self.maze.entry.y * 2 + 1
         ex_x, ex_y = self.maze.exit.x * 2 + 1, self.maze.exit.y * 2 + 1
         self.renderer[en_y][en_x] = 4
@@ -76,6 +80,7 @@ class AsciiMazeRenderer(MazeRenderer[str]):
         elif cell.x == self.maze.width - 1:
             return Cell.SOUTH
 
+
     def _get_wall_coords(self, cell: Cell, wall: int) -> tuple[int, int]:
         x, y = cell.x * 2 + 1, cell.y * 2 + 1
         if wall == Cell.NORTH:
@@ -86,6 +91,7 @@ class AsciiMazeRenderer(MazeRenderer[str]):
             return (x, y - 1)
         elif wall == Cell.EAST:
             return (x, y + 1)
+
 
     def _render_ascii(self) -> str:
         s = ""

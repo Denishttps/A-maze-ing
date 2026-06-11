@@ -31,7 +31,6 @@ class MazeGenerator:
     def create(cls, config: MazeConfig):
         for maze in cls._build(config):
             pass
-        print("Generating maze...")
         return maze
 
     @classmethod
@@ -55,15 +54,15 @@ class MazeGenerator:
         )
 
         if cfg.seed is None:
-            cfg.seed = randint(1, 100000000000000)
+            cfg.seed = randint(1, 1000000) # 1M enough
 
         pre_hooks = [hook for hook in cfg.hooks or [] if hook.stage == "pre"]
         post_hooks = [hook for hook in cfg.hooks or [] if hook.stage == "post"]
 
         algo_class = cfg.algo
         if isinstance(cfg.algo, str):
-            algo_class = cls.ALGO_MAP.get(cfg.algo or '')
-
+            algo_class = cls.ALGO_MAP.get(cfg.algo)
+        
         if algo_class is None: 
             raise MazeError(f"Unsupported algorithm: {cfg.algo}")
 

@@ -21,6 +21,10 @@
       "**/Thumbs.db": true
     },
     "github.copilot.enable": {
-        "*": true
+      "*": true,
+      "plaintext": false,
+      "markdown": false,
+      "scminput": false,
+      "python": true
     }
 }

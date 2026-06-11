@@ -24,7 +24,7 @@ class DFSMazeGenerator(MazeAlgorithm):
     def _generate_dfs(
         self,
         seed: int
-    ) -> Generator[Maze, None, None] | None:
+    ) -> Generator[Maze, None, None]:
         rng = Random(seed)
         first_cell = self.maze.get_cell(0, 0)
         stack = [first_cell]
@@ -42,3 +42,9 @@ class DFSMazeGenerator(MazeAlgorithm):
             else:
                 stack.pop()
             yield self.maze
+
+
+
+
+
+

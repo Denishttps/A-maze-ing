@@ -428,5 +428,3 @@ The project was planned in the following phases:
 - [Think Labyrinth — Maze Algorithms](http://www.astrolog.org/labyrnth/algrithm.htm)
 - [Rich Documentation](https://rich.readthedocs.io/)
 - [Pydantic Documentation](https://docs.pydantic.dev/)
-
-### AI Usage

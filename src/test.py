@@ -1,6 +1,5 @@
 import time
 
-from rich import print
 from maze_generator import MazeGenerator
 
 from config import settings
@@ -21,10 +20,10 @@ from maze_solver import MazeSolver
 
 
 cfg = MazeConfig(
-    width=25,
-    height=15,
-    entry_point=(0, 0),
-    exit_point=(24, 14),
+    width=8,
+    height=7,
+    entry_point=(3, 2),
+    exit_point=(7, 6),
     hooks=[
         Add42Pattern(),
         BreakPerfect(percent=0.1, seed=420)
@@ -34,10 +33,12 @@ cfg = MazeConfig(
 
 maze = MazeGenerator.create(config=cfg)
 
+
+
 colors = [
-    (200, 200, 200),  # cell
-    (37, 150, 190),   # wall
-    (200, 200, 200),  # blocked wall
+    (100, 10, 20),  # cell
+    (120, 150, 250),   # wall
+    (50, 200, 75),  # blocked wall
     (255, 255, 0),    # path
     (255, 0, 255),    # explored
     (255, 0, 0),      # entry/exit
@@ -45,9 +46,9 @@ colors = [
 
 
 path = MazeSolver.solve(maze)
-renderer = AsciiMazeRenderer(maze, path, colors)
+renderer = AsciiMazeRenderer(maze, None, colors)
 renderer.display()
-# exit(0)
+exit(0)
 with Live(refresh_per_second=5) as live:
     for maze in MazeGenerator.create_animated(config=cfg):
         renderer = AsciiMazeRenderer(maze, colors=colors)
