@@ -66,7 +66,7 @@ class Cell:
         self,
         value: int
     ) -> None:
-        if value is not None and not value in range(16):
+        if value is not None and not (0 <= value <= 0b1111):
             raise MazeWallError(
                 "Walls must be a 4-bit integer (0-15)."
             )

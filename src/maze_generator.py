@@ -64,7 +64,7 @@ class MazeGenerator:
         if isinstance(cfg.algo, str):
             algo_class = cls.ALGO_MAP.get(cfg.algo or '')
 
-        if algo_class is None: 
+        if algo_class is None:
             raise MazeError(f"Unsupported algorithm: {cfg.algo}")
 
         for hook in pre_hooks or []:

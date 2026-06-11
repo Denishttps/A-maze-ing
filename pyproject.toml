@@ -17,4 +17,3 @@ dependencies = [
 dev = [
     "pytest>=9.0.3",
 ]
-

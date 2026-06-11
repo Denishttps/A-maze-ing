@@ -1,5 +1,4 @@
 from models.cell import Cell
-from exceptions import InvalidEntryExitError
 
 
 class Maze:
@@ -13,7 +12,9 @@ class Maze:
         self.width = width
         self.height = height
         self.grid = [
-            [Cell(x=x, y=y) for x in range(self.width)] for y in range(self.height)
+            [
+                Cell(x=x, y=y) for x in range(self.width)
+            ] for y in range(self.height)
         ]
         self.entry = self.get_cell(*entry_point)
         self.exit = (
@@ -27,12 +28,11 @@ class Maze:
     def get_cell(self, x: int, y: int) -> Cell | None:
         if x < 0 or y < 0 or x >= self.width or y >= self.height:
             return None
-            # raise InvalidEntryExitError(f"Cell ({x}, {y}) is out of bounds.")
         return self.grid[y][x]
 
     def open_entry_exit(self) -> None:
-        self._open_border_wall(self.entry) # type: ignore[arg-type]
-        self._open_border_wall(self.exit) # type: ignore[arg-type]
+        self._open_border_wall(self.entry)
+        self._open_border_wall(self.exit)
 
     def _open_border_wall(self, cell: Cell) -> None:
         if cell.y == 0:
@@ -44,7 +44,9 @@ class Maze:
         elif cell.x == self.width - 1:
             cell.remove_wall(Cell.SOUTH)
         else:
-            raise ValueError(f"Cell ({cell.x}, {cell.y}) is not on the border.")
+            raise ValueError(
+                f"Cell ({cell.x}, {cell.y}) is not on the border."
+            )
 
     def get_unvisited(self) -> list[Cell]:
         return [
