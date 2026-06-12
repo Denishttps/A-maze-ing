@@ -3,7 +3,7 @@ from typing import Generator
 from collections import deque
 from random import randint
 
-from mazegen.interfaces import MazeAlgorithm
+from .interfaces import MazeAlgorithm
 
 from .algo.dfs import DFSMazeGenerator
 from .algo.kruskal import KruskalMazeGenerator
