@@ -1,7 +1,7 @@
 from typing import Generator
 
-from interfaces import BaseMazeSolver
-from models.cell import Cell
+from ..interfaces import BaseMazeSolver
+from ..models.cell import Cell
 
 from collections import deque
 

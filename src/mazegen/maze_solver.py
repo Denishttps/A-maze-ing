@@ -1,12 +1,11 @@
 from typing import Generator, Type
+from .models.cell import Cell
 
-from models.cell import Cell
-from models.maze import Maze
+from .models.maze import Maze
+from .interfaces import BaseMazeSolver as MazeSolverBase
 
-from interfaces import BaseMazeSolver as MazeSolverBase
-from exceptions import MazeError
-
-from solver.bfs import BFSMazeSolver
+from .exceptions import MazeError
+from .solver.bfs import BFSMazeSolver
 
 
 class MazeSolver:

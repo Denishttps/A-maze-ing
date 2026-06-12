@@ -1,10 +1,10 @@
 from typing import Type
-from interfaces import MazeAlgorithm
+from mazegen.interfaces import MazeAlgorithm
 
-from hooks.break_perfect import BreakPerfect
-from hooks.pattern_42 import Add42Pattern
+from mazegen.hooks.break_perfect import BreakPerfect
+from mazegen.hooks.pattern_42 import Add42Pattern
 
-from models.maze_config import MazeConfig
+from mazegen.models.maze_config import MazeConfig
 from config import settings
 
 
@@ -12,8 +12,8 @@ def make_maze_config(
     algo: str | Type[MazeAlgorithm] = None,
 ) -> MazeConfig:
     hooks = [Add42Pattern()]
-    if settings.perfect:
-        hooks.append(BreakPerfect(percent=0.1, seed=420))
+    if not settings.perfect:
+        hooks.append(BreakPerfect(percent=0.1, seed=settings.seed))
     return MazeConfig(
         width=settings.width,
         height=settings.height,

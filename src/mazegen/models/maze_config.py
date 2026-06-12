@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Type
 
-from interfaces import MazeAlgorithm, MazeHook
+from ..interfaces import MazeAlgorithm, MazeHook
 
 
 @dataclass

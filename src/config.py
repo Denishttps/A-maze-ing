@@ -12,10 +12,6 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
     )
 
-    pattern_42: ClassVar[list[tuple[int, int]]] = [
-        (0, 0), (0, 1), (0, 2), (1, 2), (2, 0), (2, 1), (2, 2), (2, 3), (2, 4),
-        (4, 0), (5, 0), (6, 0), (6, 1), (6, 2), (5, 2), (4, 2), (4, 3), (4, 4), (5, 4), (6, 4),  # noqa: E501
-    ]
     wall: ClassVar[str] = "\u2588\u2588"
     cell: ClassVar[str] = "  "
     cell = wall

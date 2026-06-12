@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import ClassVar, Literal, Protocol, Generic, TypeVar, Generator # noqa
 
-from models.cell import Cell
-from models.maze import Maze
+from .models.cell import Cell
+from .models.maze import Maze
 
 
 T = TypeVar('T')

@@ -1,10 +1,10 @@
-from interfaces import MazeRenderer
-from models.cell import Cell
+from mazegen.interfaces import MazeRenderer
+from mazegen.models.cell import Cell
 
 from config import settings
 from models.theme import Theme
 
-from models.maze import Maze
+from mazegen.models.maze import Maze
 from rich import print as rich_print
 
 

@@ -1,22 +1,22 @@
+from typing import Generator
+
 from collections import deque
 from random import randint
 
-from algo.dfs import DFSMazeGenerator
-from algo.kruskal import KruskalMazeGenerator
+from .algo.dfs import DFSMazeGenerator
+from .algo.kruskal import KruskalMazeGenerator
 
-from algo.prim import PrimMazeGenerator
-from algo.wilson import WilsonMazeGenerator
+from .algo.prim import PrimMazeGenerator
+from .algo.wilson import WilsonMazeGenerator
 
-from exceptions import (
+from .exceptions import (
     InvalidEntryExitError,
     MazeError,
     MazeSizeError
 )
 
-from models.maze import Maze
-from models.maze_config import MazeConfig
-
-from typing import Generator
+from .models.maze import Maze
+from .models.maze_config import MazeConfig
 
 
 class MazeGenerator:
@@ -28,7 +28,7 @@ class MazeGenerator:
     }
 
     @classmethod
-    def create(cls, config: MazeConfig):
+    def create(cls, config: MazeConfig) -> Maze:
         for maze in cls._build(config):
             pass
         return maze

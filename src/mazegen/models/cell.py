@@ -1,6 +1,5 @@
 from typing import ClassVar
-
-from exceptions import MazeWallError
+from ..exceptions import MazeWallError
 
 
 class Cell:
@@ -46,8 +45,6 @@ class Cell:
             return
 
         (dx, dy) = self._validate_cell_between(other)
-        # dx = other.x - self.x
-        # dy = other.y - self.y
 
         if dx == 1:
             self.remove_wall(Cell.SOUTH)

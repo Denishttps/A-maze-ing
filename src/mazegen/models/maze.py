@@ -1,4 +1,4 @@
-from models.cell import Cell
+from .cell import Cell
 
 
 class Maze:

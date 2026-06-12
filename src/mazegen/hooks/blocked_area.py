@@ -1,8 +1,8 @@
-from exceptions import MazeSizeError
-from interfaces import MazeHook
+from ..exceptions import MazeSizeError
+from ..interfaces import MazeHook
 
-from models.maze import Maze
-from models.cell import Cell
+from ..models.maze import Maze
+from ..models.cell import Cell
 
 
 class AddBlockedArea(MazeHook):

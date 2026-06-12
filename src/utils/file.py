@@ -1,5 +1,5 @@
-from models.maze import Maze
-from models.cell import Cell
+from mazegen.models.maze import Maze
+from mazegen.models.cell import Cell
 
 
 def create_simple_str(maze: Maze, path: list[Cell]) -> None:

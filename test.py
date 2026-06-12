@@ -1,6 +1,6 @@
 from typing import ClassVar
 
-from src.exceptions import MazeWallError
+from mazegen.exceptions import MazeWallError
 
 
 class Cell:

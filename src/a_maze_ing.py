@@ -1,21 +1,21 @@
 from random import randint
-from typing import Generator
 
 from rich.live import Live
-
 from dispatcher import Dispatcher
+
+from mazegen.hooks.break_perfect import BreakPerfect
 from models.theme import Theme
 
-from models.maze import Maze
+from mazegen.models.maze import Maze
 from config import settings
 
 from utils.file import save_maze_to_file
 from utils.maze_config import make_maze_config
 
-from utils.ui import build_ui, get_next_theme
-from maze_solver import MazeSolver
+from utils.ui import build_ui, ThemeGenerator
+from mazegen.maze_solver import MazeSolver
 
-from maze_generator import MazeGenerator
+from mazegen.maze_generator import MazeGenerator
 from renderer.ascii import AsciiMazeRenderer
 
 
@@ -54,6 +54,8 @@ def save_file() -> None:
 
 @dp.startup
 def startup(live: Live) -> None:
+    if maze_config.seed is None:
+        maze_config.seed = randint(1, 100000000000000)
     maze = MazeGenerator.create(config=maze_config)
     theme = next(dp.data['theme_gen'])
     dp.data['maze'] = maze
@@ -79,9 +81,16 @@ def regenerate_maze(live: Live, theme: Theme) -> None:
     save_file()
 
 
-@dp.on('s', help="Swap colors")
-def swap_colors(live: Live, maze: Maze, theme_gen: Generator) -> None:
+@dp.on('n', help="Next theme")
+def swap_colors(live: Live, maze: Maze, theme_gen: ThemeGenerator) -> None:
     theme = next(theme_gen)
+    dp.data['theme'] = theme
+    render_maze(live, maze, theme)
+
+
+@dp.on('b', help="Previous theme")
+def previous_theme(live: Live, maze: Maze, theme_gen: ThemeGenerator) -> None:
+    theme = theme_gen.prev()
     dp.data['theme'] = theme
     render_maze(live, maze, theme)
 
@@ -157,11 +166,28 @@ def swap_algorithm(live: Live, maze: Maze, theme: Theme) -> None:
     save_file()
 
 
+@dp.on('v', help="Switch perfect/imperfect maze")
+def switch_perfect_imperfect(live: Live, maze: Maze, theme: Theme) -> None:
+    for hook in maze_config.hooks or []:
+        if isinstance(hook, BreakPerfect):
+            maze_config.hooks.remove(hook)
+            break
+    else:
+        maze_config.hooks.append(
+            BreakPerfect(percent=0.1, seed=maze_config.seed)
+        )
+    maze = MazeGenerator.create(config=maze_config)
+    dp.data['maze'] = maze
+    refresh_path(maze)
+    render_maze(live, maze, theme)
+    save_file()
+
+
 @dp.on('q', help="Quit the application")
 def quit_app() -> None:
     dp.stop()
 
 
 if __name__ == "__main__":
-    dp.data['theme_gen'] = get_next_theme()
+    dp.data['theme_gen'] = ThemeGenerator()
     dp.run(30)

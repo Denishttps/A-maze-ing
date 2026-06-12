@@ -1,9 +1,8 @@
 from typing import Generator
-
-from interfaces import MazeAlgorithm
-
 from random import Random
-from models.maze import Maze
+
+from ..interfaces import MazeAlgorithm
+from ..models.maze import Maze
 
 
 class PrimMazeGenerator(MazeAlgorithm):
