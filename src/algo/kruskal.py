@@ -26,13 +26,15 @@ class KruskalMazeGenerator(MazeAlgorithm):
     def _generate_kruskal(
         self,
         seed: int | None = None
-    ) -> Generator[Maze, None, None] | None:
+    ) -> Generator[Maze, None, None]:
         rng = Random(seed)
 
         parent = {}
         for y in range(self.maze.height):
             for x in range(self.maze.width):
                 cell = self.maze.get_cell(x, y)
+                if cell is None:
+                    continue
                 if not cell.blocked:
                     parent[cell] = cell
 
@@ -51,6 +53,8 @@ class KruskalMazeGenerator(MazeAlgorithm):
         for y in range(self.maze.height):
             for x in range(self.maze.width):
                 cell = self.maze.get_cell(x, y)
+                if cell is None or cell.blocked:
+                    continue
                 if cell.blocked:
                     continue
                 for dx, dy in self._DIRECTIONS:
