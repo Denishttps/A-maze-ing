@@ -133,7 +133,12 @@ def animate_maze_path(live: Live, theme: Theme) -> None:
 
 @dp.on("m", help="Animate the maze generation")
 def animate_maze(live: Live, theme: Theme) -> None:
+    is_path = dp.data.get('is_path_shown')
+    dp.data['is_path_shown'] = False
     for maze in MazeGenerator.create_animated(config=maze_config):
+        render_maze(live, maze, theme)
+    if is_path:
+        dp.data['is_path_shown'] = True
         render_maze(live, maze, theme)
 
 

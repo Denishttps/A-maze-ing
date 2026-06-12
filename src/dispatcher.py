@@ -95,7 +95,7 @@ class Dispatcher:
 
             while self._running:
                 try:
-                    key = key_queue.get()
+                    key = key_queue.get(timeout=0.1)
                 except queue.Empty:
                     continue
 
