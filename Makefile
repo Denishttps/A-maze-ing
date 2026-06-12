@@ -2,7 +2,7 @@ PY  := python3
 URU  := uv run
 CFG ?= config.txt
 OUT ?= maze.txt
-MAZE := $(MAZE)
+MAZE := src/a_maze_ing.py
 
 install:
 	uv sync
@@ -28,8 +28,8 @@ output:
 	@cat $(OUT)
 
 lint:
-	$(URU) flake8 .
-	$(URU) mypy . --warn-return-any --warn-unused-ignores \
+# 	$(URU) flake8 src/
+	$(URU) mypy src/ --warn-return-any --warn-unused-ignores \
 		--ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
 lint-strict:

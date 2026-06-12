@@ -54,7 +54,7 @@ class MazeGenerator:
         )
 
         if cfg.seed is None:
-            cfg.seed = randint(1, 1000000) # 1M enough
+            cfg.seed = randint(1, 1000000)  # 1M enough
 
         pre_hooks = [hook for hook in cfg.hooks or [] if hook.stage == "pre"]
         post_hooks = [hook for hook in cfg.hooks or [] if hook.stage == "post"]
@@ -62,8 +62,8 @@ class MazeGenerator:
         algo_class = cfg.algo
         if isinstance(cfg.algo, str):
             algo_class = cls.ALGO_MAP.get(cfg.algo)
-        
-        if algo_class is None: 
+
+        if algo_class is None:
             raise MazeError(f"Unsupported algorithm: {cfg.algo}")
 
         for hook in pre_hooks or []:
@@ -107,7 +107,7 @@ class MazeGenerator:
     def _is_connected(maze: Maze) -> bool:
         start = maze.entry
         if start is None:
-            raise MazeError("Cannot generate maze: First cell (0,0) is missing or out of bounds.")
+            raise MazeError("Cannot generate maze: First cell (0,0) is missing or out of bounds.")  # noqa
         if start.blocked:
             return False
 

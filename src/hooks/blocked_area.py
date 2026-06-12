@@ -43,7 +43,7 @@ class AddBlockedArea(MazeHook):
         self._add_blocked_area(maze)
 
     def _add_blocked_area(self, maze: Maze) -> None:
-        #get the coordinates at first place clean and safe 
+        #  get the coordinates at first place clean and safe
         start_coords, _ = self._get_coordinates(maze)
         start_x, start_y = start_coords
         for y in range(start_y, start_y + self.height):

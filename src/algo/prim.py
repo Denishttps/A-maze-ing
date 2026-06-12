@@ -29,7 +29,7 @@ class PrimMazeGenerator(MazeAlgorithm):
 
         start = self.maze.get_cell(0, 0)
         if start is None:
-            raise MazeError("Cannot generate maze: First cell (0,0) is missing or out of bounds.")
+            raise MazeError("Cannot generate maze: First cell (0,0) is missing or out of bounds.")  # noqa
         start.visited = True
 
         frontier = self._get_neighbors(start, visited=False)

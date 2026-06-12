@@ -12,7 +12,7 @@ class Maze:
         self.width = width
         self.height = height
         self.grid = [
-            [Cell(x=x, y=y) for x in range(self.width)] for y in range(self.height)
+            [Cell(x=x, y=y) for x in range(self.width)] for y in range(self.height)  # noqa
         ]
         self.entry = self.get_cell(*entry_point)
         self.exit = (
@@ -29,8 +29,8 @@ class Maze:
         return self.grid[y][x]
 
     def open_entry_exit(self) -> None:
-        self._open_border_wall(self.entry) # type: ignore[arg-type]
-        self._open_border_wall(self.exit) # type: ignore[arg-type]
+        self._open_border_wall(self.entry)  # type: ignore[arg-type]
+        self._open_border_wall(self.exit)  # type: ignore[arg-type]
 
     def _open_border_wall(self, cell: Cell) -> None:
         if cell.y == 0:
@@ -42,7 +42,7 @@ class Maze:
         elif cell.x == self.width - 1:
             cell.remove_wall(Cell.SOUTH)
         else:
-            raise ValueError(f"Cell ({cell.x}, {cell.y}) is not on the border.")
+            raise ValueError(f"Cell ({cell.x}, {cell.y}) is not on the border.")  # noqa
 
     def get_unvisited(self) -> list[Cell]:
         return [
