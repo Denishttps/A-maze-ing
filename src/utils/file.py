@@ -2,7 +2,7 @@ from mazegen.models.maze import Maze
 from mazegen.models.cell import Cell
 
 
-def create_simple_str(maze: Maze, path: list[Cell]) -> None:
+def create_simple_str(maze: Maze, path: list[Cell]) -> str:
     maze_str = get_maze_str(maze)
     entry_str = f"{maze.entry.x},{maze.entry.y}"
     exit_str = f"{maze.exit.x},{maze.exit.y}"
