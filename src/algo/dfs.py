@@ -2,7 +2,7 @@ from typing import Generator
 from interfaces import MazeAlgorithm
 from random import Random
 from models.maze import Maze
-
+from exceptions import MazeError
 
 class DFSMazeGenerator(MazeAlgorithm):
     name = "dfs"
@@ -28,7 +28,6 @@ class DFSMazeGenerator(MazeAlgorithm):
         rng = Random(seed)
         first_cell = self.maze.get_cell(0, 0)
         if first_cell is None:
-            from exceptions import MazeError
             raise MazeError("Cannot generate maze: First cell (0,0) is missing or out of bounds.")
         stack = [first_cell]
         first_cell.visited = True

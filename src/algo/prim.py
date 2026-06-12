@@ -1,7 +1,6 @@
 from typing import Generator
-
 from interfaces import MazeAlgorithm
-
+from exceptions import MazeError
 from random import Random
 from models.maze import Maze
 
@@ -29,6 +28,8 @@ class PrimMazeGenerator(MazeAlgorithm):
         rng = Random(seed)
 
         start = self.maze.get_cell(0, 0)
+        if start is None:
+            raise MazeError("Cannot generate maze: First cell (0,0) is missing or out of bounds.")
         start.visited = True
 
         frontier = self._get_neighbors(start, visited=False)
