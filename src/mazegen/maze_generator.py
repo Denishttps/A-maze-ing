@@ -90,8 +90,6 @@ class MazeGenerator:
 
         cls._valid_entry_exit(maze)
 
-        return maze
-
     @staticmethod
     def _valid_entry_exit(maze: Maze) -> None:
         if not (maze.entry and maze.exit):

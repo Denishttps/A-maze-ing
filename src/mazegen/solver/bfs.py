@@ -11,6 +11,7 @@ class BFSMazeSolver(BaseMazeSolver):
 
     def solve(self) -> list[Cell] | None:
         """Solve the maze using the BFS algorithm."""
+        path: list[Cell] | None = None
         for path, _ in self._bfs():
             pass
         return path
@@ -42,7 +43,7 @@ class BFSMazeSolver(BaseMazeSolver):
                 queue.append(neighbor)
                 yield list(came_from.keys()), False
 
-        yield []
+        yield [], False
 
     def _reconstruct(
         self,
@@ -51,7 +52,7 @@ class BFSMazeSolver(BaseMazeSolver):
     ) -> list[Cell]:
         path = []
 
-        cell = end
+        cell: Cell | None = end
         while cell:
             path.append(cell)
             cell = came_from[cell]

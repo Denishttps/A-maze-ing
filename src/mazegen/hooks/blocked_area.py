@@ -40,11 +40,11 @@ class AddBlockedArea(MazeHook):
             raise MazeSizeError(
                 "Blocked area exceeds maze boundaries."
             )
-        self._add_blocked_area(maze)
+        self._add_blocked_area(maze, start)
 
-    def _add_blocked_area(self, maze: Maze) -> None:
-        for y in range(self.start[1], self.start[1] + self.height):
-            for x in range(self.start[0], self.start[0] + self.width):
+    def _add_blocked_area(self, maze: Maze, start: tuple[int, int]) -> None:
+        for y in range(start[1], start[1] + self.height):
+            for x in range(start[0], start[0] + self.width):
                 maze.grid[y][x].blocked = True
 
     def _get_coordinates(
@@ -62,6 +62,7 @@ class AddBlockedArea(MazeHook):
         self,
         maze: Maze
     ) -> tuple[int, int]:
+        assert isinstance(self.start, str)
         height = maze.height
         width = maze.width
         positions = {

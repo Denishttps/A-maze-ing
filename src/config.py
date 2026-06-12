@@ -24,17 +24,17 @@ class Settings(BaseSettings):
     perfect: bool
     seed: int | None = None
 
-    @computed_field
+    @computed_field  # type: ignore[prop-decorator]
     @property
     def entry(self) -> tuple[int, int]:
         x, y = self.entry_raw.split(',')
         return int(x), int(y)
 
-    @computed_field
+    @computed_field  # type: ignore[prop-decorator]
     @property
     def exit(self) -> tuple[int, int]:
         x, y = self.exit_raw.split(',')
         return int(x), int(y)
 
 
-settings = Settings()
+settings = Settings()  # type: ignore[call-arg]

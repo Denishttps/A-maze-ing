@@ -28,6 +28,7 @@ class PrimMazeGenerator(MazeAlgorithm):
         rng = Random(seed)
 
         start = self.maze.get_cell(0, 0)
+        assert start is not None
         start.visited = True
 
         frontier = self._get_neighbors(start, visited=False)

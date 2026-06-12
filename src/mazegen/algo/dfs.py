@@ -25,9 +25,10 @@ class DFSMazeGenerator(MazeAlgorithm):
     def _generate_dfs(
         self,
         seed: int
-    ) -> Generator[Maze, None, None] | None:
+    ) -> Generator[Maze, None, None]:
         rng = Random(seed)
         first_cell = self.maze.get_cell(0, 0)
+        assert first_cell is not None
         stack = [first_cell]
         first_cell.visited = True
 

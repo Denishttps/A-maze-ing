@@ -19,35 +19,35 @@ class MazeSolver:
         maze: Maze,
         algo: str | Type[MazeSolverBase] = 'bfs'
     ) -> list[Cell] | None:
-        for path in cls._build(maze, algo):
-            pass
-        return path
+        solver_class: type[MazeSolverBase] | None = None
+        if isinstance(algo, str):
+            solver_class = cls.SOLVER_MAP.get(algo)
+        else:
+            solver_class = algo
+        if solver_class is None:
+            raise MazeError(f"Unsupported solver: {algo}")
+        return solver_class(maze).solve()
 
     @classmethod
     def solve_animated(
         cls,
         maze: Maze,
         algo: str | Type[MazeSolverBase] = 'bfs'
-    ) -> Generator[tuple[list[Cell], bool], None, None]:
-        yield from cls._build(maze, algo, animated=True)
+    ) -> Generator[tuple[list[Cell] | None, bool], None, None]:
+        yield from cls._build(maze, algo)
 
     @classmethod
     def _build(
         cls,
         maze: Maze,
         algo: str | Type[MazeSolverBase] = 'bfs',
-        animated: bool = False
-    ) ->  Generator[tuple[list[Cell], bool], None, None]:
-        solver_class = algo
+    ) -> Generator[tuple[list[Cell] | None, bool], None, None]:
+        solver_class: type[MazeSolverBase] | None = None
         if isinstance(algo, str):
             solver_class = cls.SOLVER_MAP.get(algo)
-
+        else:
+            solver_class = algo
         if solver_class is None:
             raise MazeError(f"Unsupported solver: {algo}")
-
         solver = solver_class(maze)
-
-        if animated:
-            yield from solver.solve_step()
-        else:
-            yield solver.solve()
+        yield from solver.solve_step()

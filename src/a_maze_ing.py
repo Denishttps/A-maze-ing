@@ -28,10 +28,10 @@ def render_maze(live: Live, maze: Maze, theme: Theme) -> AsciiMazeRenderer:
     renderer = AsciiMazeRenderer(maze, colors=theme, path=path)
     live.update(build_ui(
         renderer.render(),
-        maze_config.seed,
         dp.get_help(),
         maze.algo or '',
-        theme.name
+        theme.name,
+        maze_config.seed
     ))
     return renderer
 
@@ -49,6 +49,8 @@ def save_file() -> None:
         path = MazeSolver.solve(maze)
         dp.data['path'] = path
         dp.data['is_new_maze'] = False
+    if path is None:
+        return
     save_maze_to_file(maze, path, settings.output_file)
 
 
@@ -119,10 +121,10 @@ def animate_maze_path(live: Live, theme: Theme) -> None:
         renderer.path = path
         live.update(build_ui(
             renderer.render(),
-            maze_config.seed,
             dp.get_help(),
-            maze.algo,
-            theme.name
+            maze.algo or '',
+            theme.name,
+            maze_config.seed
         ))
     dp.data['path'] = path
     dp.data['is_path_shown'] = True
@@ -143,10 +145,10 @@ def animate_path(live: Live, maze: Maze, theme: Theme) -> None:
         renderer.path = path
         live.update(build_ui(
             renderer.render(),
-            maze_config.seed,
             dp.get_help(),
-            maze.algo,
-            theme.name
+            maze.algo or '',
+            theme.name,
+            maze_config.seed
         ))
     dp.data['path'] = path
     dp.data['is_path_shown'] = True
@@ -157,6 +159,7 @@ def animate_path(live: Live, maze: Maze, theme: Theme) -> None:
 def swap_algorithm(live: Live, maze: Maze, theme: Theme) -> None:
     algos = list(MazeGenerator.ALGO_MAP.keys())
     current_algo = maze_config.algo
+    assert isinstance(current_algo, str)
     next_algo = algos[(algos.index(current_algo) + 1) % len(algos)]
     maze_config.algo = next_algo
     maze = MazeGenerator.create(config=maze_config)
@@ -168,7 +171,9 @@ def swap_algorithm(live: Live, maze: Maze, theme: Theme) -> None:
 
 @dp.on('v', help="Switch perfect/imperfect maze")
 def switch_perfect_imperfect(live: Live, maze: Maze, theme: Theme) -> None:
-    for hook in maze_config.hooks or []:
+    if maze_config.hooks is None:
+        maze_config.hooks = []
+    for hook in maze_config.hooks:
         if isinstance(hook, BreakPerfect):
             maze_config.hooks.remove(hook)
             break

@@ -38,6 +38,8 @@ class AsciiMazeRenderer(MazeRenderer[str]):
         for y in range(1, self.maze.height * 2, 2):
             for x in range(1, self.maze.width * 2, 2):
                 cell = self.maze.get_cell(x // 2, y // 2)
+                if cell is None:
+                    continue
                 if cell.blocked:
                     self._render_blocked_cells(x, y)
                     continue
@@ -57,7 +59,7 @@ class AsciiMazeRenderer(MazeRenderer[str]):
         self.renderer[en_y][en_x] = 4
         self.renderer[ex_y][ex_x] = 5
 
-    def _get_exit_wall(self, cell: Cell) -> tuple[int, int]:
+    def _get_exit_wall(self, cell: Cell) -> int:
         if cell.y == 0:
             return Cell.WEST
         elif cell.y == self.maze.height - 1:
@@ -66,6 +68,7 @@ class AsciiMazeRenderer(MazeRenderer[str]):
             return Cell.NORTH
         elif cell.x == self.maze.width - 1:
             return Cell.SOUTH
+        raise ValueError(f"Cell ({cell.x}, {cell.y}) is not on the border.")
 
     def _get_wall_coords(self, cell: Cell, wall: int) -> tuple[int, int]:
         x, y = cell.x * 2 + 1, cell.y * 2 + 1
@@ -77,6 +80,7 @@ class AsciiMazeRenderer(MazeRenderer[str]):
             return (x, y - 1)
         elif wall == Cell.EAST:
             return (x, y + 1)
+        raise ValueError(f"Unknown wall: {wall}")
 
     def _render_ascii(self) -> str:
         s = ""
@@ -97,7 +101,11 @@ class AsciiMazeRenderer(MazeRenderer[str]):
             s += "\n"
         return s
 
-    def _get_colored_str(self, chrs: str, color: str) -> str:
+    def _get_colored_str(
+        self,
+        chrs: str,
+        color: str
+    ) -> str:
         return f"[{color}]{chrs}[/{color}]"
 
     def _render_blocked_cells(
@@ -134,6 +142,8 @@ class AsciiMazeRenderer(MazeRenderer[str]):
                     self.renderer[y][x - 1] = 0
 
     def _render_path(self) -> None:
+        if self.path is None:
+            return
         for i, cell in enumerate(self.path):
             x, y = cell.x * 2 + 1, cell.y * 2 + 1
             self.renderer[y][x] = 3
@@ -144,6 +154,8 @@ class AsciiMazeRenderer(MazeRenderer[str]):
                 self.renderer[(y + ny) // 2][(x + nx) // 2] = 3
 
     def _render_explored(self) -> None:
+        if self.path is None:
+            return
         for cell in self.path:
             x, y = cell.x * 2 + 1, cell.y * 2 + 1
             self.renderer[y][x] = 3

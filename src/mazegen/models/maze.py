@@ -16,12 +16,15 @@ class Maze:
                 Cell(x=x, y=y) for x in range(self.width)
             ] for y in range(self.height)
         ]
-        self.entry = self.get_cell(*entry_point)
-        self.exit = (
-            self.get_cell(*exit_point)
-            if exit_point is not None
-            else self.get_cell(width - 1, height - 1)
-        )
+        _entry = self.get_cell(*entry_point)
+        if _entry is None:
+            raise ValueError(f"Invalid entry point: {entry_point}")
+        self.entry: Cell = _entry
+        _exit_pt = exit_point if exit_point is not None else (width - 1, height - 1)
+        _exit = self.get_cell(*_exit_pt)
+        if _exit is None:
+            raise ValueError(f"Invalid exit point: {_exit_pt}")
+        self.exit: Cell = _exit
         self.seed: int | None = None
         self.algo: str | None = None
 
