@@ -106,6 +106,8 @@ class MazeGenerator:
     @staticmethod
     def _is_connected(maze: Maze) -> bool:
         start = maze.entry
+        if start is None:
+            raise MazeError("Cannot generate maze: First cell (0,0) is missing or out of bounds.")
         if start.blocked:
             return False
 

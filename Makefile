@@ -1,32 +1,39 @@
+PY  := python3
+URU  := uv run
+CFG ?= config.txt
+OUT ?= maze.txt
+MAZE := $(MAZE)
+
 install:
 	uv sync
 
 run:
-	uv run python src/a_maze_ing.py config.txt
+	$(URU) $(PY) $(MAZE) $(CFG)
 
-#for testing, we want to run pytest with the tests/ directory as the target
 test:
-	uv run pytest -v tests/
+	$(URU) pytest -v tests/
 
 debug:
-	uv run python -m pdb src/a_maze_ing.py config.txt
+	$(URU) $(PY) -m pdb $(MAZE) $(CFG)
 
 clean:
-	rm -rf __pycache__ .venv .mypy_cache .pytest_cache \
-		src/__pycache__ src/algo/__pycache__ \
-		src/models/__pycache__ src/hooks/__pycache__ \
-		src/renderer/__pycache__ src/solver/__pycache__ \
-		src/utils/__pycache__ tests/__pycache__ tests/test_cell.pyc
+	find . -type d -name "__pycache__" -exec rm -rf {} +
+	find . -type f -name "*.pyc" -delete
+	rm -rf .mypy_cache .pytest_cache
 
+output:
+	$(URU) $(PY) $(MAZE) $(CFG)
+	@echo
+	@echo "----- $(OUT) -----"
+	@cat $(OUT)
 
 lint:
-	uv run flake8 . --warn-return-any --warn-unused-ignores \
-		--ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
-	uv run mypy . --warn-return-any --warn-unused-ignores \
+	$(URU) flake8 .
+	$(URU) mypy . --warn-return-any --warn-unused-ignores \
 		--ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
 lint-strict:
-	uv run flake8 . --strict
-	uv run mypy . --strict
+	$(URU) flake8 .
+	$(URU) mypy . --strict
 
-.PHONY: install run test debug clean lint lint-strict
+.PHONY: install run test debug clean lint lint-strict output
