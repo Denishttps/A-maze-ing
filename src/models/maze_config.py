@@ -1,7 +1,8 @@
 from dataclasses import dataclass
-from typing import Type
+from typing import Type, TYPE_CHECKING
 
-# from src.interfaces import MazeAlgorithm, MazeHook
+if TYPE_CHECKING:
+    from src.interfaces import MazeAlgorithm, MazeHook
 
 
 @dataclass
