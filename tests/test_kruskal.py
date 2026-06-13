@@ -6,8 +6,8 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from algo.kruskal import KruskalMazeGenerator
-from models.maze import Maze
+from mazegen.algo.kruskal import KruskalMazeGenerator
+from mazegen.models.maze import Maze
 
 
 class TestKruskalConstruction:

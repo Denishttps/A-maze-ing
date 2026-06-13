@@ -6,8 +6,8 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from models.cell import Cell
-from exceptions import MazeWallError
+from mazegen.models.cell import Cell
+from mazegen.exceptions import MazeWallError
 
 # ─────────────────────────────────────────────
 # 1. Construction

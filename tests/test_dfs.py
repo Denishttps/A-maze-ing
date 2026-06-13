@@ -6,9 +6,9 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from algo.dfs import DFSMazeGenerator
-from models.maze import Maze
-from models.cell import Cell
+from mazegen.algo.dfs import DFSMazeGenerator
+from mazegen.models.maze import Maze
+from mazegen.models.cell import Cell
 
 
 # ─────────────────────────────────────────────

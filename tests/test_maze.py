@@ -6,9 +6,9 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from models.maze import Maze
-from models.cell import Cell
-from exceptions import InvalidEntryExitError
+from mazegen.models.maze import Maze
+from mazegen.models.cell import Cell
+from mazegen.exceptions import InvalidEntryExitError
 
 
 # ─────────────────────────────────────────────
@@ -53,7 +53,7 @@ class TestMazeConstruction:
 
     def test_algorithm_initially_none(self):
         maze = Maze(5, 5)
-        assert maze.algorithm is None
+        assert maze.algo is None
 
     def test_all_cells_unique(self):
         maze = Maze(3, 3)
@@ -245,8 +245,8 @@ class TestMazeStateTracking:
 
     def test_algorithm_can_be_set(self):
         maze = Maze(5, 5)
-        maze.algorithm = "dfs"
-        assert maze.algorithm == "dfs"
+        maze.algo = "dfs"
+        assert maze.algo == "dfs"
 
     def test_multiple_mazes_independent(self):
         maze1 = Maze(5, 5)

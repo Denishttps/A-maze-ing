@@ -6,9 +6,9 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from hooks.break_perfect import BreakPerfect
-from models.maze import Maze
-from algo.dfs import DFSMazeGenerator
+from mazegen.hooks.break_perfect import BreakPerfect
+from mazegen.models.maze import Maze
+from mazegen.algo.dfs import DFSMazeGenerator
 
 
 # ─────────────────────────────────────────────

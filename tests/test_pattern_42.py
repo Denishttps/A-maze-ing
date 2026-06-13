@@ -6,9 +6,10 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from hooks.pattern_42 import Add42Pattern
-from models.maze import Maze
-from exceptions import MazeSizeError
+
+from mazegen.hooks.pattern_42 import Add42Pattern
+from mazegen.models.maze import Maze
+from mazegen.exceptions import MazeSizeError
 
 
 # ─────────────────────────────────────────────

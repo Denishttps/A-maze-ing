@@ -3,12 +3,13 @@ URU  := uv run
 CFG ?= config.txt
 OUT ?= maze.txt
 MAZE := a_maze_ing.py
-
-install:
-	uv sync
+SRC  := src/
 
 run:
 	$(URU) $(PY) a_maze_ing.py $(CFG)
+
+install:
+	uv sync
 
 test:
 	$(URU) pytest -v tests/
@@ -19,21 +20,25 @@ debug:
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
-	rm -rf .mypy_cache .pytest_cache
+	rm -rf .mypy_cache .pytest_cache src/mazegen.egg-info src/build \
+	maze.txt
 
 output:
-	$(URU) $(PY) a_maze_ing.py $(CFG)
-	@echo
-	@echo "----- $(OUT) -----"
+	$(URU) $(PY) a_maze_ing.py $(CFG) file_only
+	@echo "Maze output:"
 	@cat $(OUT)
 
 lint:
-	$(URU) flake8 src/
-	$(URU) mypy src/ --warn-return-any --warn-unused-ignores \
+	$(URU) flake8 src/ $(MAZE)
+	$(URU) mypy src/ $(MAZE) --warn-return-any --warn-unused-ignores \
 		--ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
 lint-strict:
-	$(URU) flake8 src/
-	$(URU) mypy src/ --strict
+	$(URU) flake8 src/ $(MAZE)
+	$(URU) mypy src/ $(MAZE) --strict
 
-.PHONY: install run test debug clean lint lint-strict output
+build:
+	cd $(SRC) && $(URU) $(PY) setup.py bdist_wheel --dist-dir .. && \
+	cd ..
+
+.PHONY: install run test debug clean lint lint-strict output build

@@ -1,0 +1,110 @@
+[
+    {
+        "name": "Default",
+        "cell": "#000000",
+        "wall": "#2596BE",
+        "blocked_cell": "#757575",
+        "path": "#FFFF00",
+        "entry": "#FF00FF",
+        "exit": "#FF0000"
+    },
+    {
+        "name": "Cyberpunk",
+        "cell": "#121212",
+        "wall": "#00F0FF",
+        "blocked_cell": "#1A1A2E",
+        "path": "#FF007F",
+        "entry": "#FF00FF",
+        "exit": "#FF0000"
+    },
+    {
+        "name": "Sandstorm",
+        "cell": "#4A453A",
+        "wall": "#2B261D",
+        "blocked_cell": "#1C1913",
+        "path": "#E6A15C",
+        "entry": "#FF00FF",
+        "exit": "#FF0000"
+    },
+    {
+        "name": "Deep Forest",
+        "cell": "#E8F5E9",
+        "wall": "#2E7D32",
+        "blocked_cell": "#1B5E20",
+        "path": "#FFB300",
+        "entry": "#FF00FF",
+        "exit": "#FF0000"
+    },
+    {
+        "name": "Deep Ocean",
+        "cell": "#0A2540",
+        "wall": "#639FAB",
+        "blocked_cell": "#001220",
+        "path": "#FFFFFF",
+        "entry": "#FF00FF",
+        "exit": "#FF0000"
+    },
+    {
+        "name": "Retro Arcade",
+        "cell": "#000000",
+        "wall": "#2121DE",
+        "blocked_cell": "#333333",
+        "path": "#FFFF00",
+        "entry": "#FF00FF",
+        "exit": "#FF0000"
+    },
+    {
+        "name": "Neon Matrix",
+        "cell": "#0D1117",
+        "wall": "#003B46",
+        "blocked_cell": "#07575B",
+        "path": "#00FF66",
+        "entry": "#FF00FF",
+        "exit": "#FF0000"
+    },
+    {
+        "name": "Vaporwave",
+        "cell": "#FFF0F5",
+        "wall": "#B57EDC",
+        "blocked_cell": "#6A0DAD",
+        "path": "#00F5D4",
+        "entry": "#FF00FF",
+        "exit": "#FF0000"
+    },
+    {
+        "name": "Volcano",
+        "cell": "#1A1110",
+        "wall": "#3A1111",
+        "blocked_cell": "#2B0000",
+        "path": "#FF5722",
+        "entry": "#FF00FF",
+        "exit": "#FF0000"
+    },
+    {
+        "name": "Steampunk",
+        "cell": "#F5E6CA",
+        "wall": "#3E2723",
+        "blocked_cell": "#271202",
+        "path": "#D4AF37",
+        "entry": "#FF00FF",
+        "exit": "#FF0000"
+    },
+    {
+        "name": "Royal Purple",
+        "cell": "#2E1A47",
+        "wall": "#140727",
+        "blocked_cell": "#0D021C",
+        "path": "#FFD700",
+        "entry": "#FF00FF",
+        "exit": "#FF0000"
+    },
+    {
+        "name": "Arctic Ice",
+        "cell": "#E0F7FA",
+        "wall": "#4A90E2",
+        "blocked_cell": "#0B3C5D",
+        "path": "#1D2731",
+        "entry": "#FF00FF",
+        "exit": "#FF0000"
+    }
+]

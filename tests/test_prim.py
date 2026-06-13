@@ -6,8 +6,8 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from algo.prim import PrimMazeGenerator
-from models.maze import Maze
+from mazegen.algo.prim import PrimMazeGenerator
+from mazegen.models.maze import Maze
 
 
 class TestPrimConstruction:

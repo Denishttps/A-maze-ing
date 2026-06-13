@@ -6,8 +6,8 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from algo.wilson import WilsonMazeGenerator
-from models.maze import Maze
+from mazegen.algo.wilson import WilsonMazeGenerator
+from mazegen.models.maze import Maze
 
 
 class TestWilsonConstruction:
