@@ -3,6 +3,7 @@ from typing import Generator
 from src.interfaces import MazeAlgorithm
 from src.models import Maze, Cell
 
+
 class KruskalMazeGenerator(MazeAlgorithm):
     name = 'kruskal'
 

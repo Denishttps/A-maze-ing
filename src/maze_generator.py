@@ -1,8 +1,9 @@
 from collections import deque
 from random import randint
-from typing import Generator
+from typing import Generator, Type
 
 from src.models import Maze, MazeConfig
+from src.interfaces import MazeAlgorithm
 from src.algo import DFSMazeGenerator, WilsonMazeGenerator, KruskalMazeGenerator, PrimMazeGenerator  # noqa 
 from src.exceptions import (
     InvalidEntryExitError,
@@ -12,7 +13,7 @@ from src.exceptions import (
 
 
 class MazeGenerator:
-    ALGO_MAP = {
+    ALGO_MAP: dict[str, Type[MazeAlgorithm]] = {
         'dfs': DFSMazeGenerator,
         'prim': PrimMazeGenerator,
         'kruskal': KruskalMazeGenerator,
@@ -51,7 +52,6 @@ class MazeGenerator:
         pre_hooks = [hook for hook in cfg.hooks or [] if hook.stage == "pre"]
         post_hooks = [hook for hook in cfg.hooks or [] if hook.stage == "post"]
 
-        algo_class = cfg.algo
         if isinstance(cfg.algo, str):
             algo_class = cls.ALGO_MAP.get(cfg.algo)
 
@@ -78,7 +78,7 @@ class MazeGenerator:
 
         cls._valid_entry_exit(maze)
 
-        return maze
+        return
 
     @staticmethod
     def _valid_entry_exit(maze: Maze) -> None:
