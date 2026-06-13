@@ -6,8 +6,8 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from models.maze_config import MazeConfig
-from interfaces import MazeAlgorithm
+from mazegen.models.maze_config import MazeConfig
+from mazegen.interfaces import MazeAlgorithm
 
 
 # ─────────────────────────────────────────────
@@ -111,7 +111,7 @@ class TestMazeConfigAlgorithms:
         assert config.algo == "wilson"
 
     def test_custom_algorithm_class(self):
-        from algo.dfs import DFSMazeGenerator
+        from mazegen.algo.dfs import DFSMazeGenerator
         config = MazeConfig(width=10, height=10, algo=DFSMazeGenerator)
         assert config.algo == DFSMazeGenerator
 
