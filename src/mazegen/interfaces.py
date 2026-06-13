@@ -84,13 +84,13 @@ class BaseMazeSolver(ABC):
         self.maze = maze
 
     @abstractmethod
-    def solve(self) -> list[Cell] | None:
+    def solve(self) -> list[Cell]:
         """Solve the maze and return the path from entry to exit."""
         raise NotImplementedError()
 
     def solve_step(
         self
-    ) -> Generator[tuple[list[Cell] | None, bool], None, None]:
+    ) -> Generator[tuple[list[Cell], bool], None, None]:
         """Solve the maze step-by-step and yield the current path."""
         path = self.solve()
         yield path, True

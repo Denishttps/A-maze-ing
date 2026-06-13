@@ -9,18 +9,18 @@ from collections import deque
 class BFSMazeSolver(BaseMazeSolver):
     """Maze solver using breadth-first search."""
 
-    def solve(self) -> list[Cell] | None:
+    def solve(self) -> list[Cell]:
         """Return the shortest path from entry to exit, or None if unsolvable.""" # noqa
-        path: list[Cell] | None = None
+        path: list[Cell] = []
         for path, _ in self._bfs():
             pass
         return path
 
-    def solve_step(self) -> Generator[tuple[list[Cell] | None, bool], None, None]: # noqa
+    def solve_step(self) -> Generator[tuple[list[Cell], bool], None, None]: # noqa
         """Yield (partial_path, is_final) tuples as BFS explores the maze."""
         yield from self._bfs()
 
-    def _bfs(self) -> Generator[tuple[list[Cell] | None, bool], None, None]:
+    def _bfs(self) -> Generator[tuple[list[Cell], bool], None, None]:
         """Core BFS loop; yields explored cells and final path."""
         start = self.maze.entry
         end = self.maze.exit

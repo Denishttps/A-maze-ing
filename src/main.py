@@ -212,7 +212,3 @@ def switch_perfect_imperfect(live: Live, maze: Maze, theme: Theme) -> None:
 def quit_app() -> None:
     """Stop the dispatcher loop and exit the application."""
     dp.stop()
-
-
-if __name__ == "__main__":
-    dp.run(30)

@@ -20,7 +20,7 @@ class MazeSolver:
         cls,
         maze: Maze,
         algo: str | Type[MazeSolverBase] = 'bfs'
-    ) -> list[Cell] | None:
+    ) -> list[Cell]:
         """Return the shortest path through the maze, or None if unsolvable."""
         solver_class: type[MazeSolverBase] | None = None
         if isinstance(algo, str):
