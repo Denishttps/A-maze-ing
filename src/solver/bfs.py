@@ -9,17 +9,24 @@ class BFSMazeSolver(MazeSolver):
 
     def solve(self) -> list[Cell] | None:
         """Solve the maze using the BFS algorithm."""
-        for path, _ in self._bfs():
-            pass
+        path: list[Cell] | None = None
+        for step_path, is_done in self._bfs():
+            if is_done:
+                path = step_path
         return path
 
-    def solve_step(self) -> Generator[tuple[list[Cell] | None, bool], None, None]: # noqa
+    def solve_step(self) -> Generator[list[Cell] | None, None, None]: # noqa
         """Solve the maze step-by-step using the BFS algorithm."""
-        yield from self._bfs()
+        for step_path, is_done in self._bfs():
+            yield step_path
 
     def _bfs(self) -> Generator[tuple[list[Cell] | None, bool], None, None]:
         start = self.maze.entry
         end = self.maze.exit
+
+        if start is None or end is None:
+            yield None, False
+            return
 
         queue = deque([start])
         came_from: dict[Cell, Cell | None] = {start: None}
@@ -40,7 +47,7 @@ class BFSMazeSolver(MazeSolver):
                 queue.append(neighbor)
                 yield list(came_from.keys()), False
 
-        yield []
+        yield None, False
 
     def _reconstruct(
         self,
@@ -49,7 +56,7 @@ class BFSMazeSolver(MazeSolver):
     ) -> list[Cell]:
         path = []
 
-        cell = end
+        cell: Cell | None = end
         while cell:
             path.append(cell)
             cell = came_from[cell]
