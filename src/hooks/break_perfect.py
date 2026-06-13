@@ -1,7 +1,7 @@
-from interfaces import MazeHook
-from models.maze import Maze
+from src.interfaces import MazeHook
+from src.models import Maze
 
-from utils.algo import break_perfect
+from src.utils.algo import break_perfect
 
 
 class BreakPerfect(MazeHook):

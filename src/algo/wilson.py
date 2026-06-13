@@ -1,10 +1,7 @@
 from random import Random
-from interfaces import MazeAlgorithm
-
 from typing import Generator
-from models.cell import Cell
-
-from models.maze import Maze
+from src.interfaces import MazeAlgorithm
+from src.models import Maze, Cell
 
 
 class WilsonMazeGenerator(MazeAlgorithm):

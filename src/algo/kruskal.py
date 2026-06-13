@@ -1,9 +1,7 @@
 from random import Random
-from interfaces import MazeAlgorithm
-from models.cell import Cell
-from models.maze import Maze
 from typing import Generator
-
+from src.interfaces import MazeAlgorithm
+from src.models import Maze, Cell
 
 class KruskalMazeGenerator(MazeAlgorithm):
     name = 'kruskal'

@@ -1,9 +1,7 @@
 from typing import Generator
-
-from interfaces import MazeSolver
-from models.cell import Cell
-
 from collections import deque
+from src.interfaces import MazeSolver
+from src.models import Cell
 
 
 class BFSMazeSolver(MazeSolver):

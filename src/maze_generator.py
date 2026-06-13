@@ -1,22 +1,14 @@
 from collections import deque
 from random import randint
+from typing import Generator
 
-from algo.dfs import DFSMazeGenerator
-from algo.kruskal import KruskalMazeGenerator
-
-from algo.prim import PrimMazeGenerator
-from algo.wilson import WilsonMazeGenerator
-
-from exceptions import (
+from src.models import Maze, MazeConfig
+from src.algo import DFSMazeGenerator, WilsonMazeGenerator, KruskalMazeGenerator, PrimMazeGenerator  # noqa 
+from src.exceptions import (
     InvalidEntryExitError,
     MazeError,
     MazeSizeError
 )
-
-from models.maze import Maze
-from models.maze_config import MazeConfig
-
-from typing import Generator
 
 
 class MazeGenerator:
@@ -101,6 +93,17 @@ class MazeGenerator:
         if maze.entry == maze.exit:
             raise InvalidEntryExitError(
                 "Entry and exit points cannot be the same."
+            )
+        is_entry_exit = all(
+            (cell.x == 0 or
+             cell.y == 0 or
+             cell.x == maze.width - 1 or
+             cell.y == maze.height - 1)
+            for cell in (maze.entry, maze.exit)
+        )
+        if not is_entry_exit:
+            raise InvalidEntryExitError(
+                "Entry or exit points are must located on the boundaries."
             )
 
     @staticmethod

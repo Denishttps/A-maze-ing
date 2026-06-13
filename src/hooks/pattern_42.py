@@ -1,8 +1,8 @@
-from config import Settings
-from exceptions import MazeSizeError
+from src.config import Settings
+from src.exceptions import MazeSizeError
 
-from interfaces import MazeHook
-from models.maze import Maze
+from src.interfaces import MazeHook
+from src.models import Maze
 
 
 class Add42Pattern(MazeHook):

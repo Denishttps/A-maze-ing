@@ -1,8 +1,8 @@
 from typing import Generator
-from interfaces import MazeAlgorithm
-from exceptions import MazeError
 from random import Random
-from models.maze import Maze
+from src.interfaces import MazeAlgorithm
+from src.exceptions import MazeError
+from src.models import Maze
 
 
 class PrimMazeGenerator(MazeAlgorithm):

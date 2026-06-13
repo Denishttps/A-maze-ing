@@ -1,10 +1,8 @@
-from interfaces import MazeRenderer
-from models.cell import Cell
-
-from config import settings
-from models.maze import Maze
-
 from rich import print as rich_print
+
+from src.interfaces import MazeRenderer
+from src.models import Cell, Maze
+from src.config import settings
 
 
 class AsciiMazeRenderer(MazeRenderer[str]):

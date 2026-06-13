@@ -1,8 +1,8 @@
 from typing import Generator
-from interfaces import MazeAlgorithm
 from random import Random
-from models.maze import Maze
-from exceptions import MazeError
+from src.interfaces import MazeAlgorithm
+from src.exceptions import MazeError
+from src.models.maze import Maze
 
 
 class DFSMazeGenerator(MazeAlgorithm):

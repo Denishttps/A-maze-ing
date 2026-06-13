@@ -1,15 +1,14 @@
 import sys
 import os
+import random  # for generating random colors 
 from pathlib import Path
 
-from solver.bfs import BFSMazeSolver
-from hooks.pattern_42 import Add42Pattern
-from models.maze_config import MazeConfig
-from config import settings
-from maze_generator import MazeGenerator
-from renderer.ascii import AsciiMazeRenderer
-import random  # for generating random colors
-
+from src.solver import BFSMazeSolver
+from src.hooks import Add42Pattern
+from src.models import MazeConfig
+from src.config import settings
+from src.maze_generator import MazeGenerator
+from src.renderer import AsciiMazeRenderer
 
 def clear_screen() -> None:
     """ Clears the terminal screen. Works on both Windows and Unix-like systems."""  # noqa: E501

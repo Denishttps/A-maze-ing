@@ -1,7 +1,6 @@
 from random import Random
 
-from models.maze import Maze
-from models.cell import Cell
+from src.models import Maze, Cell
 
 
 def break_perfect(
