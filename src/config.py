@@ -15,8 +15,7 @@ class Settings(BaseSettings):
     )
 
     wall: ClassVar[str] = "\u2588\u2588"
-    cell: ClassVar[str] = "  "
-    cell = wall
+    cell: ClassVar[str] = "\u2588\u2588"
     path: ClassVar[str] = "\u2591\u2591"
     width: int
     height: int
