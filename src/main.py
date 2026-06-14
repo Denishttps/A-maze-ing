@@ -3,7 +3,7 @@ from random import randint
 from rich.live import Live
 from dispatcher import Dispatcher
 
-from mazegen.hooks.break_perfect import BreakPerfect
+from mazegen.hooks import BreakPerfect, Add42Pattern
 from models.theme import Theme
 
 from mazegen.models.maze import Maze
@@ -201,6 +201,24 @@ def switch_perfect_imperfect(live: Live, maze: Maze, theme: Theme) -> None:
         maze_config.hooks.append(
             BreakPerfect(percent=0.1, seed=maze_config.seed)
         )
+    maze = MazeGenerator.create(config=maze_config)
+    dp.data['maze'] = maze
+    refresh_path(maze)
+    render_maze(live, maze, theme)
+    save_file()
+
+
+@dp.on('*', help="Show/Hide 42 pattern in the maze")
+def add_remove_42(live: Live, maze: Maze, theme: Theme) -> None:
+    """Toggle 42 pattern in the maze or remove it."""
+    if maze_config.hooks is None:
+        maze_config.hooks = []
+    for hook in maze_config.hooks:
+        if isinstance(hook, Add42Pattern):
+            maze_config.hooks.remove(hook)
+            break
+    else:
+        maze_config.hooks.append(Add42Pattern())
     maze = MazeGenerator.create(config=maze_config)
     dp.data['maze'] = maze
     refresh_path(maze)
