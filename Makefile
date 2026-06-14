@@ -20,7 +20,8 @@ debug:
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
-	rm -rf .mypy_cache .pytest_cache src/mazegen.egg-info src/build
+	rm -rf .mypy_cache .pytest_cache src/mazegen.egg-info src/build \
+	maze.txt
 
 output:
 	$(URU) $(PY) a_maze_ing.py $(CFG) file_only

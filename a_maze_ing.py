@@ -13,8 +13,8 @@ if __name__ == "__main__":
     try:
         if sys.argv[2] == "file_only":
             from main import maze_config
-            from main import MazeGenerator  # type:  ignore[attr-defined]
-            from main import MazeSolver  # type:  ignore[attr-defined]
+            from mazegen.maze_generator import MazeGenerator
+            from mazegen.maze_solver import MazeSolver
             from utils.file import save_maze_to_file
             from config import settings
 
@@ -24,4 +24,7 @@ if __name__ == "__main__":
             exit(0)
     except IndexError:
         pass
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"Error: {e}")
