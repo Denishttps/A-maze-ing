@@ -24,4 +24,7 @@ if __name__ == "__main__":
             exit(0)
     except IndexError:
         pass
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"Error: {e}")
