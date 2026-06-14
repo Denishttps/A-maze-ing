@@ -1,22 +1,24 @@
 from random import randint
-
 from rich.live import Live
+
+
 from dispatcher import Dispatcher
+from mazegen.hooks.pattern_42 import Add42Pattern
 
-from mazegen.hooks import BreakPerfect, Add42Pattern
 from models.theme import Theme
+from mazegen.hooks.break_perfect import BreakPerfect
 
-from mazegen.models.maze import Maze
 from config import settings
+from mazegen.models.maze import Maze
 
 from utils.file import save_maze_to_file
 from utils.maze_config import make_maze_config
 
-from utils.ui import build_ui, ThemeGenerator
 from mazegen.maze_solver import MazeSolver
+from utils.ui import build_ui, ThemeGenerator
 
-from mazegen.maze_generator import MazeGenerator
 from renderer.ascii import AsciiMazeRenderer
+from mazegen.maze_generator import MazeGenerator
 
 
 dp = Dispatcher()
